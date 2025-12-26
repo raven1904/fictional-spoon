@@ -176,11 +176,221 @@
         .wiggle {
             animation: wiggle 0.5s ease-in-out;
         }
+
+        /* Export Modal Styles */
+        .export-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .export-modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+            border-radius: 25px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid var(--card-border);
+            animation: slideUp 0.3s ease-out;
+            position: relative;
+        }
+
+        .export-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .export-modal-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--fg);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .export-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--muted-2);
+            transition: all 0.3s ease;
+        }
+
+        .export-modal-close:hover {
+            color: var(--fg);
+            transform: rotate(90deg);
+        }
+
+        .export-share-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            border: 2px solid var(--card-border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            gap: 10px;
+        }
+
+        .share-option:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-1);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.1);
+        }
+
+        .share-option-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .share-option-label {
+            font-weight: bold;
+            color: var(--fg);
+            text-align: center;
+        }
+
+        .export-format-options {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .format-option {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid var(--card-border);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            color: var(--fg);
+        }
+
+        .format-option.selected {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            border-color: var(--accent-1);
+        }
+
+        .export-preview {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--fg);
+        }
+
+        /* Additional export buttons */
+        .export-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .export-action-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .export-action-btn.primary {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+        }
+
+        .export-action-btn.secondary {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--card-border);
+            color: var(--fg);
+        }
+
+        .export-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Success message */
+        .export-success {
+            display: none;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+            border: 2px solid rgba(34, 197, 94, 0.3);
+            border-radius: 20px;
+            margin-top: 20px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .export-success.show {
+            display: block;
+        }
+
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Export loading state */
+        .export-loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .export-loading.show {
+            display: block;
+        }
     </style>
 </head>
 
 <body data-theme="neon">
-    <!-- Header -->
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -194,7 +404,7 @@
                 </div>
             </div>
 
-            <!-- Home Icon (instead of settings since we're on settings page) -->
+            <!-- Home Icon -->
             <a href="index.html" class="header-settings-icon" aria-label="Home">
                 <i data-lucide="home"></i>
             </a>
@@ -399,7 +609,7 @@
                 </h2>
 
                 <div style="margin-bottom: 20px;">
-                    <div class="export-option" onclick="exportData('health')">
+                    <div class="export-option" onclick="showExportModal('health')">
                         <div style="display: flex; align-items: center; gap: 15px;">
                             <div
                                 style="width: 50px; height: 50px; background: linear-gradient(135deg, #8B5CF6, #A78BFA); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
@@ -413,7 +623,7 @@
                         </div>
                     </div>
 
-                    <div class="export-option" onclick="exportData('medication')">
+                    <div class="export-option" onclick="showExportModal('medication')">
                         <div style="display: flex; align-items: center; gap: 15px;">
                             <div
                                 style="width: 50px; height: 50px; background: linear-gradient(135deg, #06B6D4, #38BDF8); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
@@ -427,7 +637,7 @@
                         </div>
                     </div>
 
-                    <div class="export-option" onclick="exportData('progress')">
+                    <div class="export-option" onclick="showExportModal('progress')">
                         <div style="display: flex; align-items: center; gap: 15px;">
                             <div
                                 style="width: 50px; height: 50px; background: linear-gradient(135deg, #10B981, #34D399); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
@@ -551,6 +761,52 @@
         </div>
     </main>
 
+    <!-- Export Modal -->
+    <div id="exportModal" class="export-modal">
+        <div class="export-modal-content">
+            <div class="export-modal-header">
+                <div class="export-modal-title">
+                    <i data-lucide="download" id="exportModalIcon"></i>
+                    <span id="exportModalTitle">Export Data</span>
+                </div>
+                <button class="export-modal-close" onclick="closeExportModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div id="exportModalBody">
+                <!-- Format selection will be inserted here -->
+            </div>
+
+            <div class="export-action-buttons">
+                <button class="export-action-btn secondary" onclick="downloadExport()">
+                    <i data-lucide="download"></i> Download
+                </button>
+                <button class="export-action-btn primary" onclick="shareExport()">
+                    <i data-lucide="share-2"></i> Share
+                </button>
+            </div>
+
+            <div class="export-loading" id="exportLoading">
+                <div style="margin-bottom: 15px;">
+                    <i data-lucide="loader" class="spinning" style="font-size: 32px; color: var(--accent-1);"></i>
+                </div>
+                <div style="font-weight: bold; color: var(--fg);">Preparing your export...</div>
+                <div style="color: var(--muted-2); font-size: 14px;">This may take a few seconds</div>
+            </div>
+
+            <div class="export-success" id="exportSuccess">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <i data-lucide="check-circle" style="color: var(--ok);"></i>
+                    <div style="font-weight: bold; color: var(--fg);">Export Successful!</div>
+                </div>
+                <div style="color: var(--muted-2); font-size: 14px;">
+                    Your data has been exported successfully. You can now share it using the options below.
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
@@ -583,27 +839,78 @@
         let currentAvatar = 0;
         let animationsEnabled = true;
         let confettiEnabled = true;
+        let currentExportType = '';
+        let currentExportFormat = 'json';
+
+        // Export data samples (in real app, this would come from database)
+        const exportDataSamples = {
+            health: {
+                title: 'Health Data',
+                icon: 'activity',
+                json: {
+                    patient: "Rohan Choure",
+                    conditions: ["Hypertension", "Type 2 Diabetes"],
+                    vitals: [
+                        { date: "2024-12-01", bp: "130/85", glucose: "145", weight: "78kg" },
+                        { date: "2024-12-02", bp: "128/82", glucose: "138", weight: "77.5kg" },
+                        { date: "2024-12-03", bp: "125/80", glucose: "132", weight: "77kg" }
+                    ],
+                    last_updated: new Date().toISOString()
+                },
+                csv: "Date,Blood Pressure,Glucose,Weight\n2024-12-01,130/85,145,78kg\n2024-12-02,128/82,138,77.5kg\n2024-12-03,125/80,132,77kg"
+            },
+            medication: {
+                title: 'Medication History',
+                icon: 'pill',
+                json: {
+                    patient: "Rohan Choure",
+                    medications: [
+                        { name: "Metformin", dosage: "500mg", frequency: "Twice daily", start_date: "2024-01-15" },
+                        { name: "Lisinopril", dosage: "10mg", frequency: "Once daily", start_date: "2024-02-10" },
+                        { name: "Atorvastatin", dosage: "20mg", frequency: "Once daily", start_date: "2024-03-05" }
+                    ],
+                    adherence_rate: "94%",
+                    last_updated: new Date().toISOString()
+                },
+                csv: "Medication,Dosage,Frequency,Start Date\nMetformin,500mg,Twice daily,2024-01-15\nLisinopril,10mg,Once daily,2024-02-10\nAtorvastatin,20mg,Once daily,2024-03-05"
+            },
+            progress: {
+                title: 'Progress Report',
+                icon: 'trending-up',
+                json: {
+                    patient: "Rohan Choure",
+                    period: "December 2024",
+                    achievements: [
+                        { badge: "Consistency Champion", earned: "2024-12-15" },
+                        { badge: "Glucose Guru", earned: "2024-12-20" },
+                        { badge: "Medication Master", earned: "2024-12-25" }
+                    ],
+                    stats: {
+                        tasks_completed: 45,
+                        streak_days: 28,
+                        glucose_improvement: "18%",
+                        weight_loss: "2.5kg"
+                    },
+                    last_updated: new Date().toISOString()
+                },
+                csv: "Metric,Value\nTasks Completed,45\nStreak Days,28\nGlucose Improvement,18%\nWeight Loss,2.5kg"
+            }
+        };
 
         function selectAvatar(avatarElement) {
-            // Remove selected class from all avatars
             document.querySelectorAll('.avatar-option').forEach(avatar => {
                 avatar.classList.remove('selected');
             });
 
-            // Add selected class to clicked avatar
             avatarElement.classList.add('selected');
-
-            // Get avatar index
             const avatars = Array.from(document.querySelectorAll('.avatar-option'));
             currentAvatar = avatars.indexOf(avatarElement);
 
-            // Add wiggle animation
             avatarElement.classList.add('wiggle');
             setTimeout(() => {
                 avatarElement.classList.remove('wiggle');
             }, 500);
 
-            // Update user avatar in header (if on same page)
             const userAvatar = document.querySelector('.user-avatar');
             if (userAvatar) {
                 userAvatar.innerHTML = avatarElement.textContent;
@@ -611,22 +918,17 @@
         }
 
         function selectColor(colorElement) {
-            // Remove selected class from all colors
             document.querySelectorAll('.color-option').forEach(color => {
                 color.classList.remove('selected');
             });
 
-            // Add selected class to clicked color
             colorElement.classList.add('selected');
-
-            // Get color scheme based on title
             const scheme = colorElement.getAttribute('title').toLowerCase();
             if (scheme) {
                 document.body.setAttribute('data-theme', scheme);
                 document.getElementById('theme-select').value = scheme;
                 localStorage.setItem('compassTheme', scheme);
 
-                // Add bounce animation
                 colorElement.style.transform = 'scale(1.3)';
                 setTimeout(() => {
                     colorElement.style.transform = 'scale(1.2)';
@@ -637,11 +939,9 @@
         function toggleAnimations(checkbox) {
             animationsEnabled = checkbox.checked;
             if (!animationsEnabled) {
-                // Disable animations
                 document.body.classList.add('no-animations');
                 alert('Animations disabled. Page will feel faster but less playful!');
             } else {
-                // Enable animations
                 document.body.classList.remove('no-animations');
                 alert('Animations enabled! Enjoy the playful experience! 🎉');
             }
@@ -656,19 +956,201 @@
             }
         }
 
-        function exportData(type) {
-            const messages = {
-                'health': 'Health Data',
-                'medication': 'Medication History',
-                'progress': 'Progress Report'
-            };
+        function showExportModal(type) {
+            currentExportType = type;
+            const exportData = exportDataSamples[type];
+            
+            if (!exportData) return;
 
-            alert(`📥 Preparing ${messages[type]} export...\n\nYour file will download shortly.`);
+            // Update modal title and icon
+            document.getElementById('exportModalTitle').textContent = `Export ${exportData.title}`;
+            document.getElementById('exportModalIcon').setAttribute('data-lucide', exportData.icon);
+            
+            // Create modal body content
+            const modalBody = document.getElementById('exportModalBody');
+            modalBody.innerHTML = `
+                <div style="color: var(--muted-2); margin-bottom: 20px;">
+                    Select format and preview your ${exportData.title.toLowerCase()}
+                </div>
+                
+                <div class="export-format-options">
+                    <div class="format-option ${currentExportFormat === 'json' ? 'selected' : ''}" 
+                         onclick="selectExportFormat('json')">
+                        JSON
+                    </div>
+                    <div class="format-option ${currentExportFormat === 'csv' ? 'selected' : ''}" 
+                         onclick="selectExportFormat('csv')">
+                        CSV
+                    </div>
+                    <div class="format-option ${currentExportFormat === 'abdm' ? 'selected' : ''}" 
+                         onclick="selectExportFormat('abdm')">
+                        ABDM
+                    </div>
+                </div>
+                
+                <div class="export-preview" id="exportPreview">
+                    ${getExportPreview(type, currentExportFormat)}
+                </div>
+                
+                <div class="export-share-options" id="shareOptions" style="display: none;">
+                    <div class="share-option" onclick="shareViaABDM()">
+                        <div class="share-option-icon" style="background: linear-gradient(135deg, #3B82F6, #60A5FA);">
+                            <i data-lucide="shield"></i>
+                        </div>
+                        <div class="share-option-label">ABDM</div>
+                    </div>
+                    <div class="share-option" onclick="shareViaWhatsApp()">
+                        <div class="share-option-icon" style="background: linear-gradient(135deg, #25D366, #128C7E);">
+                            <i data-lucide="message-circle"></i>
+                        </div>
+                        <div class="share-option-label">WhatsApp</div>
+                    </div>
+                    <div class="share-option" onclick="shareViaEmail()">
+                        <div class="share-option-icon" style="background: linear-gradient(135deg, #EA4335, #FBBC05);">
+                            <i data-lucide="mail"></i>
+                        </div>
+                        <div class="share-option-label">Email</div>
+                    </div>
+                    <div class="share-option" onclick="shareViaSMS()">
+                        <div class="share-option-icon" style="background: linear-gradient(135deg, #34B7F1, #075E54);">
+                            <i data-lucide="smartphone"></i>
+                        </div>
+                        <div class="share-option-label">SMS</div>
+                    </div>
+                </div>
+            `;
 
-            // Simulate download
+            // Show modal
+            document.getElementById('exportModal').style.display = 'flex';
+            
+            // Refresh Lucide icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModal').style.display = 'none';
+            document.getElementById('exportSuccess').classList.remove('show');
+            document.getElementById('shareOptions').style.display = 'none';
+        }
+
+        function selectExportFormat(format) {
+            currentExportFormat = format;
+            
+            // Update format selection UI
+            document.querySelectorAll('.format-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll('.format-option')[['json', 'csv', 'abdm'].indexOf(format)].classList.add('selected');
+            
+            // Update preview
+            document.getElementById('exportPreview').innerHTML = getExportPreview(currentExportType, format);
+        }
+
+        function getExportPreview(type, format) {
+            const data = exportDataSamples[type];
+            if (!data) return 'No data available';
+            
+            switch(format) {
+                case 'json':
+                    return `<pre>${JSON.stringify(data.json, null, 2)}</pre>`;
+                case 'csv':
+                    return `<pre>${data.csv}</pre>`;
+                case 'abdm':
+                    return `<pre>ABDM Format - FHIR Compliant\n\nPatient: ${data.json.patient}\nDate: ${new Date().toLocaleDateString()}\nFormat: JSON-LD with Digital Signature</pre>`;
+                default:
+                    return 'Format not supported';
+            }
+        }
+
+        function downloadExport() {
+            const exportData = exportDataSamples[currentExportType];
+            if (!exportData) return;
+
+            // Show loading
+            document.getElementById('exportLoading').classList.add('show');
+            
             setTimeout(() => {
-                alert(`✅ ${messages[type]} exported successfully!\n\nFile: COMPASS_${type}_export_${new Date().toISOString().split('T')[0]}.json`);
+                // Hide loading
+                document.getElementById('exportLoading').classList.remove('show');
+                
+                // Create download based on format
+                let content, filename, mimeType;
+                
+                switch(currentExportFormat) {
+                    case 'json':
+                        content = JSON.stringify(exportData.json, null, 2);
+                        filename = `COMPASS_${currentExportType}_${new Date().toISOString().split('T')[0]}.json`;
+                        mimeType = 'application/json';
+                        break;
+                    case 'csv':
+                        content = exportData.csv;
+                        filename = `COMPASS_${currentExportType}_${new Date().toISOString().split('T')[0]}.csv`;
+                        mimeType = 'text/csv';
+                        break;
+                    case 'abdm':
+                        content = JSON.stringify({
+                            ...exportData.json,
+                            format: "ABDM_FHIR",
+                            signature: "DIGITAL_SIGNATURE_PLACEHOLDER",
+                            timestamp: new Date().toISOString()
+                        }, null, 2);
+                        filename = `COMPASS_${currentExportType}_ABDM_${new Date().toISOString().split('T')[0]}.json`;
+                        mimeType = 'application/json';
+                        break;
+                }
+
+                // Create and trigger download
+                const blob = new Blob([content], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                // Show success message and share options
+                document.getElementById('exportSuccess').classList.add('show');
+                document.getElementById('shareOptions').style.display = 'grid';
+                
+                // Show notification
+                alert(`✅ ${exportData.title} downloaded successfully as ${currentExportFormat.toUpperCase()}!`);
             }, 1500);
+        }
+
+        function shareExport() {
+            const exportData = exportDataSamples[currentExportType];
+            if (!exportData) return;
+
+            // Show share options
+            document.getElementById('shareOptions').style.display = 'grid';
+            document.getElementById('exportSuccess').classList.add('show');
+            
+            // Scroll to share options
+            document.getElementById('shareOptions').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function shareViaABDM() {
+            alert(`🔐 Sharing ${exportDataSamples[currentExportType].title} via ABDM (Ayushman Bharat Digital Mission)...\n\nThis would integrate with the ABDM ecosystem for secure health data sharing.`);
+        }
+
+        function shareViaWhatsApp() {
+            const message = `Here's my ${exportDataSamples[currentExportType].title} from COMPASS Health:\n\n${window.location.href}`;
+            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function shareViaEmail() {
+            const subject = `My ${exportDataSamples[currentExportType].title} from COMPASS Health`;
+            const body = `Attached is my ${exportDataSamples[currentExportType].title} exported from COMPASS Health.\n\nGenerated on: ${new Date().toLocaleDateString()}`;
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        function shareViaSMS() {
+            alert(`📱 SMS sharing would send your ${exportDataSamples[currentExportType].title} via text message.\n\nNote: Large files may be truncated in SMS.`);
         }
 
         function resetData() {
@@ -691,23 +1173,19 @@
         }
 
         function saveSettings() {
-            // Show saving animation
             const saveBtn = document.querySelector('.btn-primary');
             const originalText = saveBtn.innerHTML;
             saveBtn.innerHTML = '<i data-lucide="loader" class="spinning"></i> Saving...';
             saveBtn.disabled = true;
 
-            // Simulate save delay
             setTimeout(() => {
                 saveBtn.innerHTML = '<i data-lucide="check-circle"></i> Saved Successfully!';
                 saveBtn.style.background = 'linear-gradient(135deg, var(--ok), #34D399)';
 
-                // Show celebration
                 if (confettiEnabled) {
                     triggerConfetti();
                 }
 
-                // Reset button after delay
                 setTimeout(() => {
                     saveBtn.innerHTML = originalText;
                     saveBtn.style.background = '';
@@ -746,7 +1224,28 @@
                     option.classList.add('selected');
                 }
             });
+
+            // Theme selector change handler
+            document.getElementById('theme-select').addEventListener('change', function() {
+                const theme = this.value;
+                document.body.setAttribute('data-theme', theme);
+                localStorage.setItem('compassTheme', theme);
+                
+                // Update selected color option
+                colorOptions.forEach(option => {
+                    option.classList.remove('selected');
+                    if (option.getAttribute('title').toLowerCase() === theme) {
+                        option.classList.add('selected');
+                    }
+                });
+            });
         });
+
+        // Confetti function (placeholder)
+        function triggerConfetti() {
+            console.log('🎊 Confetti would trigger here!');
+            // In a real implementation, you would use a confetti library
+        }
     </script>
 </body>
 
