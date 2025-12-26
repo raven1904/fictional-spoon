@@ -1,32 +1,21 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from twilio.rest import Client
 from datetime import datetime   
-from flask import send_from_directory
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-# Twilio credentials (PUT YOUR REAL VALUES)
+# Twilio credentials
 ACCOUNT_SID = "AC07962c2a7f0475dd65578f09deab36b4"
 AUTH_TOKEN = "d52d557a5f93c9cdf2daefa76b2fb29d"
-WHATSAPP_FROM = "whatsapp:+14155238886"  # Twilio sandbox number
+WHATSAPP_FROM = "whatsapp:+14155238886"
 
-# Contact numbers - MAKE SURE NO TRAILING SPACES
-FAMILY_NUMBERS = [
-    "+919325298788",  # Family member 1
-       # Family member 2
-]
-
-DOCTOR_NUMBERS = [
-    "+919325298788"  # Doctor's number
-]
-
-# Emergency contacts (for SOS)
-EMERGENCY_NUMBERS = [
-    "+919325298788",  # Primary emergency contact
-     # Secondary emergency contact - NO SPACE!
-]
+# Contact numbers
+FAMILY_NUMBERS = ["+919325298788"]
+DOCTOR_NUMBERS = ["+919325298788"]
+EMERGENCY_NUMBERS = ["+919325298788"]
 
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
@@ -34,7 +23,7 @@ def send_whatsapp_message(numbers, message):
     """Send WhatsApp message to multiple numbers"""
     sent_to = []
     for num in numbers:
-        if num and len(num) > 5:  # Basic validation
+        if num and len(num) > 5:
             try:
                 message_obj = client.messages.create(
                     body=message,
@@ -46,6 +35,63 @@ def send_whatsapp_message(numbers, message):
             except Exception as e:
                 print(f"❌ Failed to send to {num}: {e}")
     return sent_to
+
+# ==================== ADD THESE MISSING ROUTES ====================
+
+# 1. HTML PAGE ROUTES (You're missing these!)
+@app.route('/')
+def home():
+    return send_from_directory(".", "index.html")
+
+@app.route('/about')
+def about():
+    return send_from_directory(".", "about.html")
+
+@app.route('/contact')
+def contact():
+    return send_from_directory(".", "contact.html")
+
+@app.route('/feedback')
+def feedback():
+    return send_from_directory(".", "feedback.html")
+
+@app.route('/gamification')
+def gamification():
+    return send_from_directory(".", "gamification.html")
+
+@app.route('/progress')
+def progress():
+    return send_from_directory(".", "progress.html")
+
+@app.route('/todo')
+def todo():
+    return send_from_directory(".", "todo.html")
+
+@app.route('/settings')
+def settings():
+    return send_from_directory(".", "settings.html")
+
+# 2. STATIC FILE ROUTES (CSS, JS - You're missing these!)
+@app.route('/styles.css')
+def serve_css():
+    return send_from_directory(".", "styles.css")
+
+@app.route('/script.js')
+def serve_script():
+    return send_from_directory(".", "script.js")
+
+@app.route('/api.js')
+def serve_api():
+    return send_from_directory(".", "api.js")
+
+# 3. CATCH-ALL FOR OTHER STATIC FILES
+@app.route('/<path:filename>')
+def serve_static(filename):
+    if os.path.exists(filename):
+        return send_from_directory(".", filename)
+    return "File not found", 404
+
+# ==================== KEEP YOUR EXISTING API ROUTES ====================
 
 @app.route("/send-sos", methods=["POST"])
 def send_sos():
@@ -76,9 +122,7 @@ Patient has triggered an SOS alert. Immediate assistance may be required.
 *This is an automated alert from COMPASS Health Monitoring System.*
 """
     
-    # Send to all emergency contacts
     sent_to = send_whatsapp_message(EMERGENCY_NUMBERS, sos_message)
-    
     success = len(sent_to) > 0
     return jsonify({
         "success": success, 
@@ -92,12 +136,11 @@ def send_report():
     data = request.json
     print("📋 Received report request:", data)
     
-    report_type = data.get("type", "family")  # 'family' or 'doctor'
+    report_type = data.get("type", "family")
     patient_name = data.get("patient_name", "Patient")
     report_data = data.get("report", {})
     
     if report_type == "doctor":
-        # Doctor report format
         message = f"""
 🏥 *MEDICAL REPORT FOR DOCTOR REVIEW*
 
@@ -130,7 +173,6 @@ def send_report():
 """
         numbers = DOCTOR_NUMBERS
     else:
-        # Family report format
         feeling = "Great! 😊" if report_data.get('score', 0) > 80 else "Good 🙂" if report_data.get('score', 0) > 60 else "Needs attention 😐"
         
         message = f"""
@@ -159,7 +201,6 @@ def send_report():
         numbers = FAMILY_NUMBERS
     
     sent_to = send_whatsapp_message(numbers, message)
-    
     success = len(sent_to) > 0
     return jsonify({
         "success": success, 
@@ -183,17 +224,13 @@ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 """
     
     sent_to = send_whatsapp_message(FAMILY_NUMBERS + DOCTOR_NUMBERS, enhanced_message)
-    
     success = len(sent_to) > 0
     return jsonify({"success": success, "sent_to": sent_to})
 
-@app.route("/")
-def home():
-    return send_from_directory(".", "index.html")
-
-@app.route("/app")
-def send_app():
-    return send_from_directory(".", "index.html")
+# Remove or comment this duplicate route - you already have @app.route('/')
+# @app.route("/app")
+# def send_app():
+#     return send_from_directory(".", "index.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=True)
