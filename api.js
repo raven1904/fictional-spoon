@@ -3,7 +3,7 @@
 // API Communication Module
 // ====================
 
-const API_BASE_URL = "http://localhost:5002";
+const API_BASE_URL = window.location.origin;
 
 // Initialize app state
 let appState = null;
