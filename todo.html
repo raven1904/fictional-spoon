@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
     <script src="script.js" defer></script>
     <style>
+        /* Task Item Styling */
         .task-item {
             display: flex;
             align-items: center;
@@ -37,7 +38,6 @@
 
         .task-item.priority-high {
             border-left: 5px solid #EF4444;
-            animation: pulse-alert 2s infinite;
         }
 
         .task-item.priority-medium {
@@ -50,6 +50,7 @@
 
         .task-item.upcoming {
             border: 2px dashed var(--accent-1);
+            animation: pulse-alert 2s infinite;
         }
 
         .task-icon {
@@ -61,12 +62,15 @@
             justify-content: center;
             font-size: 24px;
             flex-shrink: 0;
+            color: white;
+            font-weight: bold;
         }
 
+        /* Checkmark Fix */
         .checkmark {
             width: 30px;
             height: 30px;
-            border: 3px solid var(--card-border);
+            border: 3px solid #d1d5db;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -75,10 +79,12 @@
             flex-shrink: 0;
             cursor: pointer;
             background: white;
+            position: relative;
         }
 
         .checkmark:hover {
             border-color: var(--accent-1);
+            transform: scale(1.1);
         }
 
         .checkmark.checked {
@@ -86,10 +92,18 @@
             border-color: var(--ok);
         }
 
-        .checkmark.checked i {
-            color: white;
+        .checkmark.checked svg {
             opacity: 1;
             display: block !important;
+        }
+
+        .checkmark svg {
+            width: 16px;
+            height: 16px;
+            color: white;
+            opacity: 0;
+            display: none;
+            transition: opacity 0.3s ease;
         }
 
         .task-time {
@@ -100,6 +114,7 @@
             color: var(--accent-1);
             margin-left: auto;
             flex-shrink: 0;
+            font-size: 14px;
         }
 
         .task-time.urgent {
@@ -108,8 +123,74 @@
             animation: pulse 1.5s infinite;
         }
 
+        /* Input Field Styling */
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            color: #374151;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-1), #8B5CF6);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent-1);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
         .add-task-form {
             animation: slideUp 0.5s ease-out;
+            margin-bottom: 30px;
         }
 
         .progress-circle {
@@ -128,6 +209,7 @@
             stroke-width: 8;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
+            transition: stroke-dashoffset 0.5s ease;
         }
 
         .priority-badge {
@@ -135,25 +217,29 @@
             top: 10px;
             right: 10px;
             font-size: 10px;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 12px;
             font-weight: bold;
             text-transform: uppercase;
+            z-index: 1;
         }
 
         .priority-high-badge {
             background: #FEE2E2;
             color: #DC2626;
+            border: 1px solid #FCA5A5;
         }
 
         .priority-medium-badge {
             background: #FEF3C7;
             color: #D97706;
+            border: 1px solid #FCD34D;
         }
 
         .priority-low-badge {
             background: #D1FAE5;
             color: #059669;
+            border: 1px solid #6EE7B7;
         }
 
         /* Notification Popup */
@@ -178,6 +264,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 600;
         }
 
         .notification-content {
@@ -186,8 +273,8 @@
 
         .notification-close {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             background: rgba(255, 255, 255, 0.2);
             border: none;
             border-radius: 50%;
@@ -198,10 +285,12 @@
             justify-content: center;
             cursor: pointer;
             color: white;
+            transition: all 0.3s ease;
         }
 
         .notification-close:hover {
             background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
         }
 
         .time-indicator {
@@ -214,34 +303,63 @@
         }
 
         @keyframes pulse-alert {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
         }
 
         @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { 
+                transform: translateX(100%); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
         }
 
+        @keyframes slideUp {
+            from { 
+                transform: translateY(20px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            }
+        }
+
+        /* Priority Selection */
         .task-priority {
             display: flex;
-            align-items: center;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .priority-option {
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
+            flex: 1;
+            text-align: center;
+        }
+
+        .priority-option:hover {
+            transform: translateY(-2px);
         }
 
         .priority-option.active {
             border-color: currentColor;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .priority-high-option {
@@ -249,14 +367,124 @@
             color: #DC2626;
         }
 
+        .priority-high-option:hover {
+            background: #FECACA;
+        }
+
         .priority-medium-option {
             background: #FEF3C7;
             color: #D97706;
         }
 
+        .priority-medium-option:hover {
+            background: #FDE68A;
+        }
+
         .priority-low-option {
             background: #D1FAE5;
             color: #059669;
+        }
+
+        .priority-low-option:hover {
+            background: #A7F3D0;
+        }
+
+        /* Select Dropdown Styling */
+        select.input-field {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        /* Card Styling */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            overflow: hidden;
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        /* XP Badge */
+        .xp-badge {
+            background: linear-gradient(135deg, #F59E0B, #FBBF24);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        /* XP Gain Animation */
+        .xp-gain {
+            position: fixed;
+            z-index: 9999;
+            background: linear-gradient(135deg, #10B981, #34D399);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            animation: floatUp 2s ease-out forwards;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8);
+                opacity: 0;
+            }
+            20% {
+                transform: translateY(-20px) scale(1);
+                opacity: 1;
+            }
+            80% {
+                transform: translateY(-100px) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120px) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .task-item {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .task-time {
+                margin-left: 0;
+                margin-top: 10px;
+                order: 3;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .checkmark {
+                order: 2;
+            }
+            
+            .notification-popup {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
+            }
         }
     </style>
 </head>
@@ -329,29 +557,35 @@
         </div>
 
         <!-- Add New Task -->
-        <div class="card add-task-form" style="margin-bottom: 30px;">
-            <div class="card-content" style="padding: 30px;">
+        <div class="card add-task-form">
+            <div class="card-content">
                 <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: var(--fg);">
                     <i data-lucide="plus-circle" style="color: var(--accent-1);"></i>
                     Add New Health Task
                 </h2>
 
                 <div id="new-task-form" style="display: grid; gap: 15px;">
-                    <input type="text" id="task-title" class="input-field" placeholder="What's your health goal today? 💪"
-                        style="animation: slideUp 0.3s ease-out;">
+                    <div>
+                        <input type="text" id="task-title" class="input-field" placeholder="What's your health goal today? 💪"
+                            style="animation: slideUp 0.3s ease-out;">
+                    </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <input type="time" id="task-time" class="input-field" value="10:00" style="animation: slideUp 0.4s ease-out;">
-                        <select id="task-type" class="input-field" style="animation: slideUp 0.5s ease-out;">
-                            <option value="">Select Type...</option>
-                            <option value="medication">💊 Medication</option>
-                            <option value="exercise">🏃 Exercise</option>
-                            <option value="vitals">❤️ Vitals Check</option>
-                            <option value="nutrition">🍎 Nutrition</option>
-                            <option value="hydration">💧 Hydration</option>
-                            <option value="appointment">📅 Appointment</option>
-                            <option value="therapy">🧠 Therapy</option>
-                        </select>
+                        <div>
+                            <input type="time" id="task-time" class="input-field" value="10:00" style="animation: slideUp 0.4s ease-out;">
+                        </div>
+                        <div>
+                            <select id="task-type" class="input-field" style="animation: slideUp 0.5s ease-out;">
+                                <option value="">Select Type...</option>
+                                <option value="medication">💊 Medication</option>
+                                <option value="exercise">🏃 Exercise</option>
+                                <option value="vitals">❤️ Vitals Check</option>
+                                <option value="nutrition">🍎 Nutrition</option>
+                                <option value="hydration">💧 Hydration</option>
+                                <option value="appointment">📅 Appointment</option>
+                                <option value="therapy">🧠 Therapy</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Priority Selection -->
@@ -378,8 +612,8 @@
         </div>
 
         <!-- Task List -->
-        <div class="card" style="margin-bottom: 30px;">
-            <div class="card-content" style="padding: 30px;">
+        <div class="card" style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="card-content">
                 <h2
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: var(--fg);">
                     <span><i data-lucide="sun" style="margin-right: 10px;"></i>Today's Schedule</span>
@@ -396,7 +630,7 @@
 
         <!-- Tips & Rewards -->
         <div class="card" style="margin-bottom: 40px;">
-            <div class="card-content" style="padding: 30px;">
+            <div class="card-content">
                 <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: var(--fg);">
                     <i data-lucide="lightbulb" style="color: #FFD700;"></i>
                     Pro Tips & Rewards
@@ -478,7 +712,7 @@
         let currentPriority = 'high';
         let notificationTimer = null;
 
-        // Sample initial tasks (in production, load from backend)
+        // Sample initial tasks
         const initialTasks = [
             { 
                 id: 1, 
@@ -565,63 +799,84 @@
         const taskTypeSelect = document.getElementById('task-type');
         const nextTaskTimeEl = document.getElementById('next-task-time');
 
-        // Task completion functionality
+        // Task completion functionality - FIXED CHECKMARK
         function toggleTask(taskElement, taskId) {
-            const checkmark = taskElement.querySelector('.checkmark');
-            const isCompleted = checkmark.classList.contains('checked');
+            console.log('Toggling task:', taskId);
+            
             const task = tasks.find(t => t.id === taskId);
+            if (!task) {
+                console.error('Task not found:', taskId);
+                return;
+            }
 
-            if (!task) return;
-
-            if (isCompleted) {
-                // Uncomplete task
-                checkmark.classList.remove('checked');
-                taskElement.classList.remove('completed');
-                task.completed = false;
-                completedTasks--;
-                
-                // Remove XP badge if it exists
-                const xpBadge = taskElement.querySelector('.xp-badge');
-                if (xpBadge) xpBadge.remove();
-            } else {
-                // Complete task
-                checkmark.classList.add('checked');
-                taskElement.classList.add('completed');
-                task.completed = true;
+            // Toggle completion status
+            task.completed = !task.completed;
+            
+            // Update completedTasks count
+            if (task.completed) {
                 completedTasks++;
-                
-                // Show XP gain
+            } else {
+                completedTasks--;
+            }
+
+            // Update task element UI
+            updateTaskElementUI(taskElement, task);
+            
+            // Show XP gain if completed
+            if (task.completed) {
                 const xpEarned = Math.floor(Math.random() * 5) + 5; // 5-10 XP
                 showXPGain(xpEarned, taskElement);
-                
-                // Play sound and confetti
                 triggerConfetti();
                 
-                // Check if task was completed on time (within 15 minutes)
+                // Check for on-time completion bonus
                 const now = new Date();
                 const taskTime = parseTime(task.time);
-                const timeDiff = Math.abs(now - taskTime) / (1000 * 60); // difference in minutes
+                const timeDiff = Math.abs(now - taskTime) / (1000 * 60);
                 
                 if (timeDiff <= 15) {
                     setTimeout(() => {
                         showXPGain(2, taskElement, "On-time bonus!");
                     }, 300);
                 }
-                
-                // Check if all tasks are completed
-                if (completedTasks === totalTasks) {
-                    setTimeout(() => {
-                        showNotification("🎉 Amazing!", "All tasks completed! You earned a bonus 25 XP!");
-                        showXPGain(25, document.querySelector('.page-title'));
-                        triggerConfetti();
-                    }, 500);
-                }
+            }
+
+            // Check if all tasks are completed
+            if (completedTasks === totalTasks) {
+                setTimeout(() => {
+                    showNotification("🎉 Amazing!", "All tasks completed! You earned a bonus 25 XP!");
+                    showXPGain(25, document.querySelector('.page-title'));
+                    triggerConfetti();
+                }, 500);
             }
             
             // Update progress
             updateProgress();
-            // Save to localStorage (in production, save to backend)
+            // Save to localStorage
             saveTasks();
+        }
+
+        // Update task element UI
+        function updateTaskElementUI(taskElement, task) {
+            const checkmark = taskElement.querySelector('.checkmark');
+            const checkIcon = taskElement.querySelector('.checkmark svg');
+            
+            if (task.completed) {
+                taskElement.classList.add('completed');
+                checkmark.classList.add('checked');
+                if (checkIcon) {
+                    checkIcon.style.display = 'block';
+                    checkIcon.style.opacity = '1';
+                }
+            } else {
+                taskElement.classList.remove('completed');
+                checkmark.classList.remove('checked');
+                if (checkIcon) {
+                    checkIcon.style.opacity = '0';
+                    setTimeout(() => {
+                        checkIcon.style.display = 'none';
+                    }, 300);
+                }
+            }
         }
 
         // Add new task functionality
@@ -631,7 +886,7 @@
             const type = taskTypeSelect.value;
 
             if (!title || !time || !type) {
-                showNotification("⚠️ Missing Info", "Please fill all fields to add a task.");
+                showNotification("⚠️ Missing Information", "Please fill in all fields to add a task.");
                 return;
             }
 
@@ -658,6 +913,13 @@
             taskTimeInput.value = '10:00';
             taskTypeSelect.value = '';
             
+            // Reset priority to high
+            document.querySelectorAll('.priority-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            document.querySelector('.priority-high-option').classList.add('active');
+            currentPriority = 'high';
+            
             // Show success message
             showXPGain(5, addTaskBtn);
             showNotification("✅ Task Added", `${title} has been added to your schedule.`);
@@ -676,7 +938,7 @@
         function renderTasks() {
             if (!taskList) return;
 
-            // Sort tasks by time and priority (high priority first, then by time)
+            // Sort tasks by priority and time
             const sortedTasks = [...tasks].sort((a, b) => {
                 const priorityOrder = { high: 0, medium: 1, low: 2 };
                 if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
@@ -746,14 +1008,20 @@
             const now = new Date();
             const taskTime = parseTime(task.time);
             const timeDiff = (taskTime - now) / (1000 * 60); // minutes until task
-            const isUrgent = timeDiff <= 15 && timeDiff > 0;
+            const isUrgent = timeDiff <= 15 && timeDiff > 0 && !task.completed;
             const isOverdue = timeDiff < 0 && !task.completed;
+            
+            const priorityBadgeClass = `priority-${task.priority}-badge`;
+            const priorityText = task.priority === 'high' ? 'High' : task.priority === 'medium' ? 'Medium' : 'Low';
             
             return `
                 <div class="task-item ${task.completed ? 'completed' : ''} priority-${task.priority} ${isUrgent ? 'upcoming' : ''}" 
                      onclick="toggleTask(this, ${task.id})" data-task-id="${task.id}">
-                    ${isUrgent ? '<div class="priority-badge priority-high-badge">⏰ Soon</div>' : ''}
-                    ${isOverdue ? '<div class="priority-badge priority-high-badge">⚠️ Overdue</div>' : ''}
+                    ${!task.completed ? `
+                        <div class="priority-badge ${priorityBadgeClass}">
+                            ${priorityText} Priority
+                        </div>
+                    ` : ''}
                     
                     <div class="task-icon" style="background: ${task.color};">
                         ${task.icon}
@@ -763,11 +1031,13 @@
                         <div style="color: var(--muted-2); font-size: 14px;">${task.description}</div>
                         <div class="time-indicator">
                             <i data-lucide="clock" width="12" height="12"></i>
-                            ${getTimeUntilString(taskTime)}
+                            ${getTimeUntilString(taskTime, task.completed)}
                         </div>
                     </div>
                     <div class="checkmark ${task.completed ? 'checked' : ''}">
-                        <i data-lucide="check" style="width: 16px; height: 16px; ${task.completed ? '' : 'display: none;'}"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
                     </div>
                     <div class="task-time ${isUrgent ? 'urgent' : ''}">
                         ${formatTimeDisplay(task.time)}
@@ -801,35 +1071,6 @@
             updateNextTaskTime();
         }
 
-        // Update next upcoming task time
-        function updateNextTaskTime() {
-            if (!nextTaskTimeEl) return;
-            
-            const now = new Date();
-            const upcomingTasks = tasks.filter(task => !task.completed);
-            
-            if (upcomingTasks.length === 0) {
-                nextTaskTimeEl.textContent = "All tasks completed! 🎉";
-                return;
-            }
-            
-            // Find the next task by time
-            upcomingTasks.sort((a, b) => parseTime(a.time) - parseTime(b.time));
-            const nextTask = upcomingTasks[0];
-            const nextTime = parseTime(nextTask.time);
-            const timeDiff = (nextTime - now) / (1000 * 60); // minutes
-            
-            if (timeDiff < 0) {
-                nextTaskTimeEl.textContent = "Tasks overdue ⏰";
-            } else if (timeDiff < 60) {
-                nextTaskTimeEl.textContent = `Next: ${nextTask.title} in ${Math.round(timeDiff)} min`;
-            } else {
-                const hours = Math.floor(timeDiff / 60);
-                const minutes = Math.round(timeDiff % 60);
-                nextTaskTimeEl.textContent = `Next: ${nextTask.title} in ${hours}h ${minutes}m`;
-            }
-        }
-
         // Check for upcoming tasks and show notifications
         function checkUpcomingTasks() {
             const now = new Date();
@@ -851,21 +1092,6 @@
                                 task
                             );
                             localStorage.setItem(`notified_${task.id}`, 'true');
-                        }, 1000); // Small delay for better UX
-                    }
-                }
-                
-                // Show overdue notification
-                if (timeDiff < 0 && Math.abs(timeDiff) <= 5) {
-                    const alreadyNotified = localStorage.getItem(`overdue_${task.id}`);
-                    if (!alreadyNotified) {
-                        setTimeout(() => {
-                            showNotification(
-                                "⚠️ Task Overdue", 
-                                `${task.title} was scheduled for ${formatTimeDisplay(task.time)}`,
-                                task
-                            );
-                            localStorage.setItem(`overdue_${task.id}`, 'true');
                         }, 1000);
                     }
                 }
@@ -889,15 +1115,17 @@
                     </button>
                 </div>
                 <div class="notification-content">
-                    <p>${message}</p>
+                    <p style="margin-bottom: 15px; color: #374151;">${message}</p>
                     ${task ? `
-                        <div style="margin-top: 15px; display: flex; gap: 10px;">
-                            <button class="btn-primary" style="padding: 8px 16px; font-size: 14px;" 
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-primary" style="padding: 10px 16px; font-size: 14px; flex: 1;" 
                                     onclick="completeTaskFromNotification(${task.id}); this.parentElement.parentElement.parentElement.remove()">
+                                <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
                                 Mark Complete
                             </button>
-                            <button class="btn-secondary" style="padding: 8px 16px; font-size: 14px;"
+                            <button class="btn-secondary" style="padding: 10px 16px; font-size: 14px;"
                                     onclick="this.parentElement.parentElement.parentElement.remove()">
+                                <i data-lucide="clock" style="width: 16px; height: 16px;"></i>
                                 Remind Later
                             </button>
                         </div>
@@ -912,12 +1140,14 @@
                 lucide.createIcons();
             }
             
-            // Auto-remove after 10 seconds
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 10000);
+            // Auto-remove after 10 seconds if no task action
+            if (!task) {
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 10000);
+            }
         }
 
         // Helper functions
@@ -935,15 +1165,17 @@
             return `${displayHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
         }
 
-        function getTimeUntilString(taskTime) {
+        function getTimeUntilString(taskTime, completed) {
+            if (completed) return "Completed";
+            
             const now = new Date();
             const diffMs = taskTime - now;
             const diffMins = Math.round(diffMs / (1000 * 60));
             
             if (diffMins < 0) {
-                return `${Math.abs(diffMins)} minutes ago`;
+                return `${Math.abs(diffMins)} min overdue`;
             } else if (diffMins < 60) {
-                return `in ${diffMins} minutes`;
+                return `in ${diffMins} min`;
             } else {
                 const hours = Math.floor(diffMins / 60);
                 const mins = diffMins % 60;
@@ -1012,44 +1244,26 @@
             }
         }
 
-        function saveTasks() {
-            // In production, send to backend API
-            // For demo, save to localStorage
-            localStorage.setItem('healthTasks', JSON.stringify(tasks));
-            localStorage.setItem('completedTasks', completedTasks);
-            localStorage.setItem('totalTasks', totalTasks);
-        }
-
-        function loadTasks() {
-            // In production, load from backend API
-            // For demo, load from localStorage
-            const savedTasks = localStorage.getItem('healthTasks');
-            const savedCompleted = localStorage.getItem('completedTasks');
-            const savedTotal = localStorage.getItem('totalTasks');
-            
-            if (savedTasks) {
-                tasks = JSON.parse(savedTasks);
-                completedTasks = parseInt(savedCompleted) || 0;
-                totalTasks = parseInt(savedTotal) || tasks.length;
-            }
-        }
-
         function showXPGain(xp, element, message = null) {
-            const xpBadge = document.createElement('div');
-            xpBadge.className = 'xp-badge';
-            xpBadge.style.position = 'absolute';
-            xpBadge.style.zIndex = '1000';
-            xpBadge.style.animation = 'slideUp 0.5s ease-out forwards';
-            xpBadge.innerHTML = `<i data-lucide="sparkles"></i> +${xp} XP ${message ? `(${message})` : ''}`;
+            const xpGain = document.createElement('div');
+            xpGain.className = 'xp-gain';
+            xpGain.innerHTML = `<i data-lucide="sparkles"></i> +${xp} XP${message ? `<br><small>${message}</small>` : ''}`;
             
             const rect = element.getBoundingClientRect();
-            xpBadge.style.left = `${rect.left + rect.width / 2 - 50}px`;
-            xpBadge.style.top = `${rect.top - 30}px`;
+            xpGain.style.left = `${rect.left + rect.width / 2 - 60}px`;
+            xpGain.style.top = `${rect.top}px`;
             
-            document.body.appendChild(xpBadge);
+            document.body.appendChild(xpGain);
+            
+            // Reinitialize Lucide icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
             
             setTimeout(() => {
-                xpBadge.remove();
+                if (xpGain.parentNode) {
+                    xpGain.remove();
+                }
             }, 2000);
         }
 
@@ -1063,6 +1277,25 @@
             }
         }
 
+        // Save and load tasks
+        function saveTasks() {
+            localStorage.setItem('healthTasks', JSON.stringify(tasks));
+            localStorage.setItem('completedTasks', completedTasks.toString());
+            localStorage.setItem('totalTasks', totalTasks.toString());
+        }
+
+        function loadTasks() {
+            const savedTasks = localStorage.getItem('healthTasks');
+            const savedCompleted = localStorage.getItem('completedTasks');
+            const savedTotal = localStorage.getItem('totalTasks');
+            
+            if (savedTasks) {
+                tasks = JSON.parse(savedTasks);
+                completedTasks = parseInt(savedCompleted) || 0;
+                totalTasks = parseInt(savedTotal) || tasks.length;
+            }
+        }
+
         // Initialize page
         document.addEventListener('DOMContentLoaded', function () {
             // Load saved tasks
@@ -1072,15 +1305,7 @@
             renderTasks();
             updateProgress();
             
-            // Add animations to task items
-            document.querySelectorAll('.task-item').forEach((item, index) => {
-                item.style.animationDelay = `${index * 0.1}s`;
-                if (!item.classList.contains('slide-up-animation')) {
-                    item.classList.add('slide-up-animation');
-                }
-            });
-
-            // Form submission
+            // Add event listeners
             addTaskBtn.addEventListener('click', addNewTask);
             
             // Allow Enter key to submit form
@@ -1090,21 +1315,51 @@
                 }
             });
 
-            // Check for upcoming tasks every minute
+            // Check for upcoming tasks
             checkUpcomingTasks();
-            notificationTimer = setInterval(checkUpcomingTasks, 60000); // Check every minute
             
-            // Update next task time every minute
+            // Set up interval for checking upcoming tasks
+            notificationTimer = setInterval(checkUpcomingTasks, 60000);
+            
+            // Update next task time
             setInterval(updateNextTaskTime, 60000);
         });
 
-        // Cleanup on page unload
+        // Clean up intervals
         window.addEventListener('beforeunload', function() {
             if (notificationTimer) {
                 clearInterval(notificationTimer);
             }
         });
+
+        // Update next task time display
+        function updateNextTaskTime() {
+            if (!nextTaskTimeEl) return;
+            
+            const now = new Date();
+            const upcomingTasks = tasks.filter(task => !task.completed);
+            
+            if (upcomingTasks.length === 0) {
+                nextTaskTimeEl.textContent = "All tasks completed! 🎉";
+                return;
+            }
+            
+            // Find the next task by time
+            upcomingTasks.sort((a, b) => parseTime(a.time) - parseTime(b.time));
+            const nextTask = upcomingTasks[0];
+            const nextTime = parseTime(nextTask.time);
+            const timeDiff = (nextTime - now) / (1000 * 60);
+            
+            if (timeDiff < 0) {
+                nextTaskTimeEl.textContent = "Tasks overdue ⏰";
+            } else if (timeDiff < 60) {
+                nextTaskTimeEl.textContent = `Next: ${nextTask.title} in ${Math.round(timeDiff)} min`;
+            } else {
+                const hours = Math.floor(timeDiff / 60);
+                const minutes = Math.round(timeDiff % 60);
+                nextTaskTimeEl.textContent = `Next: ${nextTask.title} in ${hours}h ${minutes}m`;
+            }
+        }
     </script>
 </body>
-
 </html>
