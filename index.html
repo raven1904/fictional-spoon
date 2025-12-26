@@ -4,20 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COMPASS - Health Dashboard</title>
+    <title>COMPASS - Health Dashboard & AI Coach</title>
     <link rel="stylesheet" href="styles.css">
+    
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 
-<style>
-
-</style>
-
 <body data-theme="neon">
-    <!-- Header -->
-    <!-- Header -->
     <header class="header">
         <div class="header-content">
             <div class="user-info">
@@ -26,13 +21,10 @@
                 </div>
                 <div class="greeting">
                     <h1>Hello, Rohan! <span class="text-gradient float-animation">👋</span></h1>
-                    <p><i data-lucide="sun"></i> <span id="greeting">Good Morning!</span> • <span
-                            id="current-time">08:30
-                            AM</span></p>
+                    <p><i data-lucide="sun"></i> <span id="greeting">Good Morning!</span> • <span id="current-time">08:30 AM</span></p>
                 </div>
             </div>
 
-            <!-- Settings Icon -->
             <a href="settings.html" class="header-settings-icon" aria-label="Settings">
                 <i data-lucide="settings"></i>
             </a>
@@ -49,12 +41,11 @@
             </div>
         </div>
 
-        <!-- Vitals Display -->
-        <div class="vitals-display"
-            style="margin-top: 20px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
-            <div class="vital-item">
+        <div class="vitals-display">
+            <div class="vital-item" style="position: relative;">
                 <i data-lucide="heart" style="color: var(--danger)"></i>
                 <span style="font-weight: bold;">72</span> BPM
+                <div class="vital-badge"></div>
             </div>
             <div class="vital-item">
                 <i data-lucide="thermometer" style="color: var(--warn)"></i>
@@ -68,14 +59,14 @@
                 <i data-lucide="wind" style="color: var(--ok)"></i>
                 <span style="font-weight: bold;">97</span> SpO₂
             </div>
+            <div class="vital-item highlight-vital">
+                <i data-lucide="flame" style="color: #FF6B00"></i>
+                <span style="font-weight: bold; color: #FF6B00;" class="streak-count">7</span> Day Streak
+            </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content">
-        <h1 class="page-title">Health Dashboard</h1>
-
-        <!-- Compliance Score -->
         <div class="card" style="margin-bottom: 30px;">
             <div class="card-content" style="padding: 30px;">
                 <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
@@ -94,28 +85,141 @@
             </div>
         </div>
 
-        <!-- Quick Actions -->
         <div class="card" style="margin-bottom: 30px;">
             <div class="card-content" style="padding: 30px;">
-                <h2 style="margin-bottom: 20px;">Quick Actions</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
-                    <button class="btn-primary" onclick="window.location.href='todo.html'">
-                        <i data-lucide="list-checks"></i> Today's Tasks
-                    </button>
-                    <button class="btn-secondary" onclick="window.location.href='progress.html'">
-                        <i data-lucide="trending-up"></i> Progress
-                    </button>
-                    <button class="btn-secondary" onclick="window.location.href='gamification.html'">
-                        <i data-lucide="gamepad-2"></i> Health Game
-                    </button>
-                    <button class="btn-primary" onclick="window.location.href='feedback.html'">
-                        <i data-lucide="message-square"></i> Give Feedback
-                    </button>
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <i data-lucide="activity" style="color: var(--accent-1)"></i>
+                    Real-time Risk Monitoring
+                </h2>
+
+                <div class="risk-grid">
+                    <div style="text-align: center;">
+                        <div style="font-size: 32px; font-weight: 900;" class="risk-score">25</div>
+                        <div style="color: var(--muted-2);">Risk Score</div>
+                        <div style="font-size: 12px; color: var(--ok); margin-top: 5px;">Low Risk</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 32px; font-weight: 900;" class="current-streak">7</div>
+                        <div style="color: var(--muted-2);">Day Streak</div>
+                        <div style="font-size: 12px; color: var(--warn); margin-top: 5px;"><i data-lucide="flame"></i> Keep going!</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 32px; font-weight: 900;" class="shield-count">1</div>
+                        <div style="color: var(--muted-2);">Safety Shields</div>
+                        <div style="font-size: 12px; color: var(--accent-2); margin-top: 5px;"><i data-lucide="shield"></i> Active</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i data-lucide="info" style="margin-right: 8px;"></i>
+                    Your safety shield protects your streak from one missed dose. Earn more by maintaining streaks!
                 </div>
             </div>
         </div>
 
-        <!-- Recent Activity -->
+        <div class="card ai-card" style="margin-bottom: 30px;">
+            <div class="card-content" style="padding: 30px;">
+                <div class="ai-badge">
+                    <i data-lucide="sparkles"></i> AI Personalized Nudge Coach
+                </div>
+                <h2 style="margin-top: 15px; margin-bottom: 10px;">Struggling with adherence?</h2>
+                <p style="color: var(--muted-2); font-size: 14px;">Select a topic below to see specific options.</p>
+
+                <div class="ai-quick-select">
+                    <button class="ai-chip" onclick="showSubOptions('fitness')">💪 Fitness</button>
+                    <button class="ai-chip" onclick="showSubOptions('hydration')">💧 Dehydration</button>
+                    <button class="ai-chip" onclick="showSubOptions('diet')">🥗 Diet & Nutrition</button>
+                    <button class="ai-chip" onclick="setNudgeContext('')">✏️ Manual Type</button>
+                </div>
+
+                <div id="ai-sub-options" class="ai-sub-options hidden">
+                    </div>
+
+                <textarea id="nudge-context" class="ai-input" rows="3" placeholder="Describe your barrier here..."></textarea>
+
+                <div class="ai-controls">
+                    <div class="custom-select-wrapper">
+                        <label>Coach Tone</label>
+                        <select id="nudge-tone" class="ai-select custom-select">
+                            <option value="supportive">🤗 Supportive & Kind</option>
+                            <option value="direct">👨‍⚕️ Direct & Clinical</option>
+                            <option value="gamified">🎮 Gamified & Fun</option>
+                            <option value="tough-love">🔥 Tough Love</option>
+                        </select>
+                    </div>
+                    <div class="custom-select-wrapper">
+                        <label>Strategy</label>
+                        <select id="nudge-logic" class="ai-select custom-select">
+                            <option value="implementation intentions">📝 Action Planning</option>
+                            <option value="anchoring">⚓ Habit Stacking</option>
+                            <option value="loss aversion">🛡️ Streak Protection</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="nudge-generate-btn" class="btn-primary" style="width: 100%; margin-top: 20px;" onclick="generateNudge()">
+                    <span id="nudge-btn-text">Generate Nudge Strategy</span>
+                    <div id="nudge-loading" class="spinner hidden"></div>
+                </button>
+
+                <div id="nudge-output" class="ai-output">
+                    <div class="output-header">
+                        <span class="output-title">
+                            <i data-lucide="bot"></i> Coach Plan
+                        </span>
+                        <button onclick="copyNudge()" class="copy-btn">
+                            <i data-lucide="copy" style="width: 14px;"></i> COPY
+                        </button>
+                    </div>
+                    <div id="nudge-text" class="nudge-content-styled"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card eatsence-card" style="margin-bottom: 30px;">
+            <div class="eatsence-badge">
+                <i data-lucide="crown"></i> eatsence.ai Premium
+            </div>
+            <div class="card-content" style="padding: 30px; position: relative; z-index: 1;">
+                <div class="eatsence-header">
+                    <div>
+                        <h2 class="gold-gradient-text" style="font-size: 24px; font-weight: 800; margin-bottom: 5px;">AI Nutrition Tracker</h2>
+                        <p style="color: var(--muted-2); font-size: 13px;">Daily Target: <span style="color: #D4AF37; font-weight: bold;">2200 kcal</span></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted-2);">Consumed</span>
+                        <div id="kcal-display-card" class="gold-gradient-text" style="font-size: 28px; font-weight: 900;">0 kcal</div>
+                    </div>
+                </div>
+
+                <div class="macro-grid">
+                    <div class="macro-item">
+                        <span class="macro-label">Protein</span>
+                        <div class="macro-bar"><div id="bar-protein" style="width: 0%; background: #D4AF37;"></div></div>
+                        <span class="macro-val" id="val-protein">0g</span>
+                    </div>
+                    <div class="macro-item">
+                        <span class="macro-label">Carbs</span>
+                        <div class="macro-bar"><div id="bar-carbs" style="width: 0%; background: #F59E0B;"></div></div>
+                        <span class="macro-val" id="val-carbs">0g</span>
+                    </div>
+                    <div class="macro-item">
+                        <span class="macro-label">Fats</span>
+                        <div class="macro-bar"><div id="bar-fat" style="width: 0%; background: #EAB308;"></div></div>
+                        <span class="macro-val" id="val-fat">0g</span>
+                    </div>
+                </div>
+
+                <button onclick="openEatsenceScan()" class="btn-primary gold-btn-effect" style="width: 100%; margin-top: 25px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+                    <i data-lucide="camera"></i> AI Scan Food
+                </button>
+                
+                <div style="margin-top: 15px; text-align: center; font-size: 12px; color: var(--muted-2); font-style: italic;">
+                    Powered by Multimodal AI Analysis
+                </div>
+            </div>
+        </div>
+
         <div class="card" style="margin-bottom: 30px;">
             <div class="card-content" style="padding: 30px;">
                 <h2 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -125,10 +229,8 @@
                     </div>
                 </h2>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div class="activity-item"
-                        style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(139, 92, 246, 0.1); border-radius: 16px;">
-                        <div
-                            style="width: 40px; height: 40px; background: var(--ok); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <div class="activity-item ok-bg">
+                        <div class="activity-icon ok">
                             <i data-lucide="check-circle" style="color: white;"></i>
                         </div>
                         <div>
@@ -136,10 +238,8 @@
                             <p style="color: var(--muted-2); font-size: 14px;">08:00 AM • +10 XP</p>
                         </div>
                     </div>
-                    <div class="activity-item"
-                        style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(6, 182, 212, 0.1); border-radius: 16px;">
-                        <div
-                            style="width: 40px; height: 40px; background: var(--accent-2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <div class="activity-item accent-bg">
+                        <div class="activity-icon accent">
                             <i data-lucide="activity" style="color: white;"></i>
                         </div>
                         <div>
@@ -150,37 +250,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- Info Cards -->
-        <div
-            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
-            <div class="card">
-                <div class="card-content" style="padding: 25px;">
-                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                        <i data-lucide="pill" style="color: var(--accent-1)"></i>
-                        Medication Tracker
-                    </h3>
-                    <p style="font-size: 36px; font-weight: 900; margin-bottom: 10px;" class="text-gradient">2/3</p>
-                    <p style="color: var(--muted-2); margin-bottom: 15px;">Doses Taken Today</p>
-                    <button class="btn-secondary" style="width: 100%;">Next: 08:00 PM</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content" style="padding: 25px;">
-                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                        <i data-lucide="footprints" style="color: var(--accent-3)"></i>
-                        Daily Activity
-                    </h3>
-                    <p style="font-size: 36px; font-weight: 900; margin-bottom: 10px;" class="text-gradient">4,356</p>
-                    <p style="color: var(--muted-2); margin-bottom: 15px;">Steps Taken</p>
-                    <button class="btn-secondary" style="width: 100%;">Goal: 5,000 steps</button>
-                </div>
-            </div>
-        </div>
     </main>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
             <i data-lucide="home"></i>
@@ -190,13 +261,9 @@
             <i data-lucide="list-checks"></i>
             <span>To-Do</span>
         </a>
-
-        <div class="sos-button" onmousedown="startSOSCountdown()"
-            onmouseup='this.innerHTML = "<i data-lucide=\"siren\"></i>"' ontouchstart="startSOSCountdown()"
-            ontouchend='this.innerHTML = "<i data-lucide=\"siren\"></i>"'>
+        <div class="sos-button" onmousedown="startSOSCountdown()" onmouseup='this.innerHTML = "<i data-lucide=\"siren\"></i>"' ontouchstart="startSOSCountdown()" ontouchend='this.innerHTML = "<i data-lucide=\"siren\"></i>"'>
             <i data-lucide="siren"></i>
         </div>
-
         <a href="progress.html" class="nav-item">
             <i data-lucide="trending-up"></i>
             <span>Progress</span>
@@ -206,6 +273,116 @@
             <span>Game</span>
         </a>
     </nav>
-</body>
 
+    <div id="eatsence-scan-modal" class="custom-modal hidden">
+        <div class="custom-modal-content">
+            <div class="modal-header">
+                <h3 class="gold-gradient-text">AI Food Analysis</h3>
+                <button onclick="closeEatsenceModal()" class="close-modal-btn"><i data-lucide="x"></i></button>
+            </div>
+            
+            <div class="scan-options">
+                <label class="scan-option-btn">
+                    <input type="file" id="eatsence-camera" accept="image/*" capture="environment" hidden>
+                    <i data-lucide="camera" style="width: 32px; height: 32px; margin-bottom: 10px; color: #D4AF37;"></i>
+                    <span>Capture Photo</span>
+                </label>
+                
+                <label class="scan-option-btn">
+                    <input type="file" id="eatsence-upload" accept="image/*" hidden>
+                    <i data-lucide="upload" style="width: 32px; height: 32px; margin-bottom: 10px; color: #F59E0B;"></i>
+                    <span>Upload Image</span>
+                </label>
+            </div>
+
+            <div class="divider">OR SELECT MANUAL</div>
+
+            <div class="custom-select-wrapper" style="margin-bottom: 20px;">
+                <select id="manual-food-select" class="ai-select custom-select" style="border-color: #D4AF37;">
+                    <option value="">Select a common food item...</option>
+                    <option value="Raw Gala Apple, large size">Gala Apple</option>
+                    <option value="Medium Ripe Banana">Banana</option>
+                    <option value="Raw Broccoli florets">Broccoli</option>
+                    <option value="Whole Avocado">Avocado</option>
+                    <option value="Sweet Potato, cooked">Sweet Potato</option>
+                    <option value="Raw Chicken Breast, 100g">Chicken Breast (Raw)</option>
+                    <option value="Cooked Brown Rice, 100g">Brown Rice (Cooked)</option>
+                </select>
+            </div>
+
+            <button id="btn-analyze" class="btn-primary gold-btn-effect" style="width: 100%;" onclick="triggerAnalysis()">
+                Run Multimodal Analysis
+            </button>
+            
+            <div id="eatsence-loading" class="spinner-container hidden">
+                <div class="spinner" style="border-top-color: #D4AF37;"></div>
+                <p>AI Identifying...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="eatsence-result-modal" class="custom-modal hidden">
+        <div class="custom-modal-content">
+            <div class="modal-header">
+                <h3 id="res-food-name" class="gold-gradient-text">Food Name</h3>
+                <button onclick="closeEatsenceResult()" class="close-modal-btn"><i data-lucide="x"></i></button>
+            </div>
+            
+            <div class="result-details">
+                <div class="confidence-badge">AI Confidence: <span id="res-confidence">98</span>%</div>
+                
+                <div class="macro-summary-grid">
+                    <div class="summary-box">
+                        <span class="lbl">Calories</span>
+                        <span class="val" id="res-kcal">0</span>
+                    </div>
+                    <div class="summary-box">
+                        <span class="lbl">Protein</span>
+                        <span class="val" id="res-protein">0g</span>
+                    </div>
+                    <div class="summary-box">
+                        <span class="lbl">Carbs</span>
+                        <span class="val" id="res-carbs">0g</span>
+                    </div>
+                    <div class="summary-box">
+                        <span class="lbl">Fats</span>
+                        <span class="val" id="res-fat">0g</span>
+                    </div> 
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Portion Size (grams)</label>
+                    <input type="number" id="res-portion" class="ai-input" value="100">
+                </div>
+
+                <div class="pro-tip-box">
+                    <strong>✨ Pro Tip:</strong> <span id="res-tip">Loading tip...</span>
+                </div>
+
+                <button onclick="confirmLogFood()" class="btn-primary gold-btn-effect" style="width: 100%; margin-top: 20px;">
+                    Log to Diary
+                </button>
+            </div>
+        </div>
+    </div>
+<script>
+  // Initialize file inputs for eatsence
+  document.addEventListener('DOMContentLoaded', function() {
+    const cameraLabel = document.querySelector('label[for="eatsence-camera"]');
+    const uploadLabel = document.querySelector('label[for="eatsence-upload"]');
+    
+    if (cameraLabel) {
+      cameraLabel.addEventListener('click', function() {
+        document.getElementById('eatsence-camera').click();
+      });
+    }
+    
+    if (uploadLabel) {
+      uploadLabel.addEventListener('click', function() {
+        document.getElementById('eatsence-upload').click();
+      });
+    }
+  });
+</script>
+</body>
 </html>
