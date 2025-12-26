@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMPASS - Health Adventure</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+  <script src="script.js" defer></script>
+  <style>
+    .game-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .stat-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 20px;
+    }
+
+    .badge-item {
+      text-align: center;
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid var(--card-border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .badge-item.locked {
+      filter: grayscale(1);
+      opacity: 0.7;
+    }
+
+    .badge-item.unlocked:hover {
+      transform: translateY(-10px) rotate(5deg);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .badge-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      display: inline-block;
+      animation: bounceIn 0.6s ease-out;
+    }
+
+    .mystery-box {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #8B5CF6, #06B6D4, #F97316);
+      border-radius: 25px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: pulse 2s infinite;
+      transition: all 0.3s ease;
+    }
+
+    .mystery-box:hover {
+      transform: scale(1.1) rotate(5deg);
+      animation: none;
+    }
+
+    .mystery-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s linear infinite;
+    }
+
+    .quest-item {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      margin-bottom: 15px;
+      border: 2px solid var(--card-border);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .quest-item:hover {
+      transform: translateX(10px);
+      border-color: var(--accent-1);
+    }
+
+    .quest-progress {
+      height: 8px;
+      background: rgba(139, 92, 246, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .quest-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .powerup-card {
+      padding: 25px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .powerup-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-1));
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .powerup-card:hover::before {
+      opacity: 1;
+      animation: gradient-x 3s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinning {
+      animation: spin 2s linear infinite;
+    }
+
+    .header-settings-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid var(--card-border);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: auto;
+      margin-right: 15px;
+      text-decoration: none;
+    }
+
+    .header-settings-icon:hover {
+      background: white;
+      transform: rotate(15deg) scale(1.1);
+      border-color: var(--accent-1);
+      box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+    }
+
+    .header-settings-icon i {
+      width: 24px;
+      height: 24px;
+      color: var(--accent-1);
+    }
+  </style>
+</head>
+
+<body data-theme="neon">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="user-info">
+        <div class="user-avatar" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+          <i data-lucide="gamepad-2"></i>
+        </div>
+        <div class="greeting">
+          <h1>Health Adventure <span class="text-gradient float-animation">🎮</span></h1>
+          <p><i data-lucide="zap"></i> Level up your health journey!</p>
+        </div>
+      </div>
+
+      <!-- Settings Icon -->
+      <a href="settings.html" class="header-settings-icon" aria-label="Settings">
+        <i data-lucide="settings"></i>
+      </a>
+
+      <div class="header-controls">
+        <div class="xp-badge" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+          <i data-lucide="coins"></i> 125 Health Coins
+        </div>
+        <button class="btn-secondary" onclick="window.location.href='index.html'">
+          <i data-lucide="arrow-left"></i> Home
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <h1 class="page-title">Your Gaming Dashboard</h1>
+
+    <!-- Player Stats -->
+    <div class="card" style="margin-bottom: 30px;">
+      <div class="card-content" style="padding: 30px;">
+        <div class="game-stats">
+          <div style="text-align: center;">
+            <div class="stat-circle"
+              style="background: linear-gradient(135deg, #8B5CF6, #A78BFA); animation-delay: 0s;">
+              <div style="font-size: 32px; font-weight: 900; color: white;">5</div>
+              <div style="font-size: 12px; color: white;">Level</div>
+            </div>
+            <div style="margin-top: 10px; color: var(--muted-2);">Health Master</div>
+          </div>
+
+          <div style="text-align: center;">
+            <div class="stat-circle"
+              style="background: linear-gradient(135deg, #06B6D4, #38BDF8); animation-delay: 0.5s;">
+              <div style="font-size: 32px; font-weight: 900; color: white;">7</div>
+              <div style="font-size: 12px; color: white;">Day Streak</div>
+            </div>
+            <div style="margin-top: 10px; color: var(--muted-2);">On Fire! 🔥</div>
+          </div>
+
+          <div style="text-align: center;">
+            <div class="stat-circle"
+              style="background: linear-gradient(135deg, #10B981, #34D399); animation-delay: 1s;">
+              <div style="font-size: 32px; font-weight: 900; color: white;">23</div>
+              <div style="font-size: 12px; color: white;">Badges</div>
+            </div>
+            <div style="margin-top: 10px; color: var(--muted-2);">Collector</div>
+          </div>
+
+          <div style="text-align: center;">
+            <div class="stat-circle"
+              style="background: linear-gradient(135deg, #F97316, #FB7185); animation-delay: 1.5s;">
+              <div style="font-size: 32px; font-weight: 900; color: white;">3</div>
+              <div style="font-size: 12px; color: white;">Power-ups</div>
+            </div>
+            <div style="margin-top: 10px; color: var(--muted-2);">Active</div>
+          </div>
+        </div>
+
+        <!-- Level Progress -->
+        <div style="margin-top: 30px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-weight: bold; color: var(--fg);">Progress to Level 6</span>
+            <span style="color: var(--muted);">1,250/1,500 XP</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bar" style="width: 83%;"></div>
+          </div>
+          <div style="text-align: center; margin-top: 15px; color: var(--accent-2);">
+            <i data-lucide="zap"></i> 250 XP to level up!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mystery Box -->
+    <div class="card" style="margin-bottom: 30px;">
+      <div class="card-content" style="padding: 30px; text-align: center;">
+        <h2 style="margin-bottom: 20px; color: var(--fg);">
+          <i data-lucide="package" style="margin-right: 10px;"></i>
+          Daily Mystery Box
+        </h2>
+
+        <div class="mystery-box" onclick="openMysteryBox()">
+          <div style="text-align: center;">
+            <div style="font-size: 48px;">🎁</div>
+            <div style="color: white; font-weight: bold; margin-top: 10px;">Click to Open!</div>
+            <div style="color: rgba(255,255,255,0.8); font-size: 14px;">Cost: 10 Health Coins</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px; color: var(--muted-2);">
+          <i data-lucide="info" style="margin-right: 5px;"></i>
+          Contains XP boosts, coins, or rare badges!
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Quests -->
+    <div class="card" style="margin-bottom: 30px;">
+      <div class="card-content" style="padding: 30px;">
+        <h2
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: var(--fg);">
+          <span><i data-lucide="target" style="margin-right: 10px;"></i>Active Quests</span>
+          <div class="xp-badge">
+            <i data-lucide="clock"></i> Reset in 6h 30m
+          </div>
+        </h2>
+
+        <div id="quests-list">
+          <div class="quest-item" onclick="completeQuest(this)">
+            <div
+              style="width: 50px; height: 50px; background: linear-gradient(135deg, #8B5CF6, #A78BFA); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="pill" style="color: white;"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-weight: bold; color: var(--fg);">Medication Master</div>
+              <div style="color: var(--muted-2); font-size: 14px;">Take all medications on time for 3 days</div>
+              <div class="quest-progress">
+                <div class="quest-progress-fill" style="width: 66%;"></div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: bold; color: var(--ok);">+50 XP</div>
+              <div style="color: var(--muted-2); font-size: 12px;">2/3 days</div>
+            </div>
+          </div>
+
+          <div class="quest-item" onclick="completeQuest(this)">
+            <div
+              style="width: 50px; height: 50px; background: linear-gradient(135deg, #06B6D4, #38BDF8); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="heart" style="color: white;"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-weight: bold; color: var(--fg);">Vitals Champion</div>
+              <div style="color: var(--muted-2); font-size: 14px;">Record vitals 5 times this week</div>
+              <div class="quest-progress">
+                <div class="quest-progress-fill" style="width: 40%;"></div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: bold; color: var(--ok);">+75 XP</div>
+              <div style="color: var(--muted-2); font-size: 12px;">2/5 times</div>
+            </div>
+          </div>
+
+          <div class="quest-item" onclick="completeQuest(this)">
+            <div
+              style="width: 50px; height: 50px; background: linear-gradient(135deg, #10B981, #34D399); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="flame" style="color: white;"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-weight: bold; color: var(--fg);">Streak Builder</div>
+              <div style="color: var(--muted-2); font-size: 14px;">Maintain a 10-day activity streak</div>
+              <div class="quest-progress">
+                <div class="quest-progress-fill" style="width: 70%;"></div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: bold; color: var(--ok);">+100 XP</div>
+              <div style="color: var(--muted-2); font-size: 12px;">7/10 days</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <button class="btn-secondary">
+            <i data-lucide="refresh-cw"></i> Refresh Quests (5 coins)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badge Collection -->
+    <div class="card" style="margin-bottom: 30px;">
+      <div class="card-content" style="padding: 30px;">
+        <h2
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; color: var(--fg);">
+          <span><i data-lucide="award" style="margin-right: 10px;"></i>Badge Collection</span>
+          <div class="xp-badge">
+            <i data-lucide="star"></i> 23/50 Collected
+          </div>
+        </h2>
+
+        <div class="badge-grid">
+          <div class="badge-item unlocked" onclick="viewBadge('streak-7')">
+            <div class="badge-icon">🔥</div>
+            <div style="font-weight: bold; color: var(--fg);">7-Day Streak</div>
+            <div style="color: var(--muted-2); font-size: 12px;">Common</div>
+          </div>
+
+          <div class="badge-item unlocked" onclick="viewBadge('medication-pro')">
+            <div class="badge-icon">💊</div>
+            <div style="font-weight: bold; color: var(--fg);">Medication Pro</div>
+            <div style="color: var(--muted-2); font-size: 12px;">Uncommon</div>
+          </div>
+
+          <div class="badge-item unlocked" onclick="viewBadge('vitals-master')">
+            <div class="badge-icon">❤️</div>
+            <div style="font-weight: bold; color: var(--fg);">Vitals Master</div>
+            <div style="color: var(--muted-2); font-size: 12px;">Rare</div>
+          </div>
+
+          <div class="badge-item locked">
+            <div class="badge-icon">🏆</div>
+            <div style="font-weight: bold; color: var(--muted-2);">Perfect Month</div>
+            <div style="color: var(--muted-2); font-size: 12px;">Epic</div>
+            <div style="position: absolute; top: 10px; right: 10px;">
+              <i data-lucide="lock" style="width: 16px; height: 16px; color: var(--muted-2);"></i>
+            </div>
+          </div>
+
+          <div class="badge-item unlocked" onclick="viewBadge('early-bird')">
+            <div class="badge-icon">🌅</div>
+            <div style="font-weight: bold; color: var(--fg);">Early Bird</div>
+            <div style="color: var(--muted-2); font-size: 12px;">Common</div>
+          </div>
+
+          <div class="badge-item locked">
+            <div class="badge-icon">👑</div>
+            <div style="font-weight: bold; color: var(--muted-2);">Health King</div>
+            <div style="color: var(--muted-2); font-size: 12px;">Legendary</div>
+            <div style="position: absolute; top: 10px; right: 10px;">
+              <i data-lucide="lock" style="width: 16px; height: 16px; color: var(--muted-2);"></i>
+            </div>
+          </div>
+
+          <div class="badge-item unlocked" onclick="viewBadge('task-completer')">
+            <div class="badge-icon">✅</div>
+            <div style="font-weight: bold; color: var(--fg);">Task Completer</div>
+            <div style="color: var(--muted-2); font-size: 12px;">Common</div>
+          </div>
+
+          <div class="badge-item unlocked" onclick="viewBadge('hydration-hero')">
+            <div class="badge-icon">💧</div>
+            <div style="font-weight: bold; color: var(--fg);">Hydration Hero</div>
+            <div style="color: var(--muted-2); font-size: 12px;">Uncommon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Power-ups -->
+    <div class="card" style="margin-bottom: 40px;">
+      <div class="card-content" style="padding: 30px;">
+        <h2 style="margin-bottom: 25px; color: var(--fg);">
+          <i data-lucide="zap" style="margin-right: 10px;"></i>
+          Active Power-ups
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+          <div class="powerup-card">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+              <div
+                style="width: 60px; height: 60px; background: linear-gradient(135deg, #FFD700, #FFA500); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+                ⚡
+              </div>
+              <div>
+                <div style="font-weight: bold; color: var(--fg);">XP Doubler</div>
+                <div style="color: var(--muted-2); font-size: 14px;">2x XP for 24 hours</div>
+              </div>
+            </div>
+            <div style="color: var(--accent-1); font-weight: bold; display: flex; align-items: center; gap: 5px;">
+              <i data-lucide="clock"></i> 8h 45m remaining
+            </div>
+          </div>
+
+          <div class="powerup-card">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+              <div
+                style="width: 60px; height: 60px; background: linear-gradient(135deg, #8B5CF6, #A78BFA); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+                🛡️
+              </div>
+              <div>
+                <div style="font-weight: bold; color: var(--fg);">Streak Shield</div>
+                <div style="color: var(--muted-2); font-size: 14px;">Protects your streak for 3 days</div>
+              </div>
+            </div>
+            <div style="color: var(--accent-1); font-weight: bold; display: flex; align-items: center; gap: 5px;">
+              <i data-lucide="clock"></i> 2 days remaining
+            </div>
+          </div>
+
+          <div class="powerup-card">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+              <div
+                style="width: 60px; height: 60px; background: linear-gradient(135deg, #06B6D4, #38BDF8); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+                🎯
+              </div>
+              <div>
+                <div style="font-weight: bold; color: var(--fg);">Auto-Completer</div>
+                <div style="color: var(--muted-2); font-size: 14px;">Auto-completes 3 random tasks</div>
+              </div>
+            </div>
+            <div style="color: var(--accent-1); font-weight: bold; display: flex; align-items: center; gap: 5px;">
+              <i data-lucide="check-circle"></i> Ready to use
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <button class="btn-primary">
+            <i data-lucide="shopping-cart"></i> Visit Power-up Store
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+    <a href="todo.html" class="nav-item">
+      <i data-lucide="list-checks"></i>
+      <span>To-Do</span>
+    </a>
+
+    <div class="sos-button" onmousedown="startSOSCountdown()"
+      onmouseup='this.innerHTML = "<i data-lucide=\" siren\"></i>"' ontouchstart="startSOSCountdown()"
+      ontouchend='this.innerHTML = "<i data-lucide=\"siren\"></i>"'>
+      <i data-lucide="siren"></i>
+    </div>
+
+    <a href="progress.html" class="nav-item">
+      <i data-lucide="trending-up"></i>
+      <span>Progress</span>
+    </a>
+    <a href="gamification.html" class="nav-item active">
+      <i data-lucide="gamepad-2"></i>
+      <span>Game</span>
+    </a>
+  </nav>
+
+  <script>
+    // Game page functionality
+    let healthCoins = 125;
+
+    function openMysteryBox() {
+      const box = document.querySelector('.mystery-box');
+      if (healthCoins < 10) {
+        alert('You need 10 Health Coins to open a Mystery Box!');
+        return;
+      }
+
+      // Deduct coins
+      healthCoins -= 10;
+      document.querySelector('.xp-badge').innerHTML = `<i data-lucide="coins"></i> ${healthCoins} Health Coins`;
+
+      // Add spinning animation
+      box.classList.add('spinning');
+
+      // Show rewards after delay
+      setTimeout(() => {
+        box.classList.remove('spinning');
+
+        const rewards = [
+          { type: 'xp', amount: 50, emoji: '⭐', message: 'You found 50 XP!' },
+          { type: 'coins', amount: 25, emoji: '🪙', message: 'You found 25 Health Coins!' },
+          { type: 'badge', name: 'Lucky Charm', emoji: '🍀', message: 'You found a Lucky Charm badge!' },
+          { type: 'powerup', name: 'XP Boost', emoji: '⚡', message: 'You found a 2x XP Boost!' }
+        ];
+
+        const reward = rewards[Math.floor(Math.random() * rewards.length)];
+
+        // Update box content with reward
+        box.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px;">${reward.emoji}</div>
+                        <div style="color: white; font-weight: bold; margin-top: 10px;">${reward.message}</div>
+                    </div>
+                `;
+
+        // Show celebration
+        triggerConfetti();
+        alert(`🎉 ${reward.message}`);
+
+        // Reset box after 3 seconds
+        setTimeout(() => {
+          box.innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px;">🎁</div>
+                            <div style="color: white; font-weight: bold; margin-top: 10px;">Click to Open!</div>
+                            <div style="color: rgba(255,255,255,0.8); font-size: 14px;">Cost: 10 Health Coins</div>
+                        </div>
+                    `;
+          box.style.animation = 'pulse 2s infinite';
+        }, 3000);
+      }, 2000);
+    }
+
+    function completeQuest(questElement) {
+      const progress = questElement.querySelector('.quest-progress-fill');
+      const currentWidth = parseInt(progress.style.width);
+
+      if (currentWidth < 100) {
+        // Update progress
+        const newWidth = Math.min(100, currentWidth + 34);
+        progress.style.width = `${newWidth}%`;
+
+        // Update count
+        const countElement = questElement.querySelector('div:nth-child(3) div:nth-child(2)');
+        const [current, total] = countElement.textContent.split('/').map(Number);
+        countElement.textContent = `${Math.min(total, current + 1)}/${total}`;
+
+        // Show XP gain
+        const xpAmount = parseInt(questElement.querySelector('div:nth-child(4) div:nth-child(1)').textContent.replace('+', '').replace(' XP', ''));
+        showXPGain(xpAmount / 3, questElement);
+
+        // Check if quest is complete
+        if (newWidth >= 100) {
+          questElement.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2))';
+          questElement.style.borderColor = 'var(--ok)';
+
+          // Show completion reward
+          setTimeout(() => {
+            alert(`🎉 Quest Complete! You earned ${xpAmount} XP!`);
+            showXPGain(xpAmount, questElement);
+            triggerConfetti();
+          }, 500);
+        }
+      }
+    }
+
+    function viewBadge(badgeId) {
+      const badgeNames = {
+        'streak-7': '7-Day Streak',
+        'medication-pro': 'Medication Pro',
+        'vitals-master': 'Vitals Master',
+        'early-bird': 'Early Bird',
+        'task-completer': 'Task Completer',
+        'hydration-hero': 'Hydration Hero'
+      };
+
+      const badge = badgeNames[badgeId];
+      if (badge) {
+        alert(`🏆 ${badge}\n\nYou earned this badge by demonstrating consistent healthy habits!`);
+        triggerConfetti();
+      }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function () {
+      // Add animations to game elements
+      document.querySelectorAll('.stat-circle').forEach((circle, index) => {
+        circle.style.animationDelay = `${index * 0.5}s`;
+      });
+
+      document.querySelectorAll('.badge-item.unlocked').forEach((badge, index) => {
+        badge.style.animationDelay = `${index * 0.1}s`;
+        if (!badge.classList.contains('slide-up-animation')) {
+          badge.classList.add('slide-up-animation');
+        }
+      });
+
+      document.querySelectorAll('.quest-item').forEach((quest, index) => {
+        quest.style.animationDelay = `${index * 0.1}s`;
+        if (!quest.classList.contains('slide-up-animation')) {
+          quest.classList.add('slide-up-animation');
+        }
+      });
+
+      document.querySelectorAll('.powerup-card').forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        if (!card.classList.contains('slide-up-animation')) {
+          card.classList.add('slide-up-animation');
+        }
+      });
+
+      // Add hover effect to settings icon
+      const settingsIcon = document.querySelector('.header-settings-icon');
+      if (settingsIcon) {
+        settingsIcon.addEventListener('mouseenter', function () {
+          this.style.transform = 'rotate(15deg) scale(1.1)';
+        });
+
+        settingsIcon.addEventListener('mouseleave', function () {
+          this.style.transform = 'rotate(0) scale(1)';
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

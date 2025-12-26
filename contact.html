@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - Contact Us</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+    <script src="script.js" defer></script>
+    <style>
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .contact-card {
+            padding: 30px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+            border: 2px solid var(--card-border);
+            transition: all 0.3s ease;
+            animation: slideUp 0.5s ease-out;
+            text-align: center;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .faq-item {
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border: 2px solid var(--card-border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent-1);
+            transform: translateX(10px);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--fg);
+        }
+
+        .faq-answer {
+            color: var(--muted-2);
+            margin-top: 15px;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+        }
+
+        .contact-form {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(15deg);
+            }
+
+            75% {
+                transform: rotate(-15deg);
+            }
+        }
+
+        .wave {
+            display: inline-block;
+            animation: wave 1s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body data-theme="neon">
+    <!-- Header -->
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="user-info">
+                <div class="user-avatar" style="background: linear-gradient(135deg, #06B6D4, #38BDF8);">
+                    <i data-lucide="phone"></i>
+                </div>
+                <div class="greeting">
+                    <h1>We're Here to Help! <span class="text-gradient float-animation">👋</span></h1>
+                    <p><i data-lucide="heart"></i> Your health journey is our priority</p>
+                </div>
+            </div>
+
+            <!-- Settings Icon -->
+            <a href="settings.html" class="header-settings-icon" aria-label="Settings">
+                <i data-lucide="settings"></i>
+            </a>
+
+            <div class="header-controls">
+                <button class="btn-secondary" onclick="window.location.href='index.html'">
+                    <i data-lucide="arrow-left"></i> Home
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Get In Touch</h1>
+
+        <!-- Contact Methods -->
+        <div class="contact-grid">
+            <div class="contact-card" style="animation-delay: 0.1s;">
+                <div class="contact-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                    <i data-lucide="mail" style="color: white;"></i>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--fg);">Email Support</h3>
+                <p style="color: var(--muted-2); margin-bottom: 15px;">We reply within 24 hours</p>
+                <a href="mailto:support@compass.health" class="btn-primary" style="display: inline-block;">
+                    <i data-lucide="send"></i> support@compass.health
+                </a>
+            </div>
+
+            <div class="contact-card" style="animation-delay: 0.2s;">
+                <div class="contact-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                    <i data-lucide="message-circle" style="color: white;"></i>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--fg);">Live Chat</h3>
+                <p style="color: var(--muted-2); margin-bottom: 15px;">Available 9 AM - 9 PM</p>
+                <button class="btn-primary" onclick="startLiveChat()">
+                    <i data-lucide="message-square"></i> Start Chat
+                </button>
+            </div>
+
+            <div class="contact-card" style="animation-delay: 0.3s;">
+                <div class="contact-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                    <i data-lucide="phone-call" style="color: white;"></i>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--fg);">Phone Support</h3>
+                <p style="color: var(--muted-2); margin-bottom: 15px;">Mon-Fri, 10 AM - 6 PM</p>
+                <a href="tel:+18001234567" class="btn-primary" style="display: inline-block;">
+                    <i data-lucide="phone"></i> 1-800-123-4567
+                </a>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="card contact-form" style="margin-bottom: 40px;">
+            <div class="card-content" style="padding: 40px;">
+                <h2 style="text-align: center; margin-bottom: 30px; color: var(--fg);">
+                    <i data-lucide="message-square" style="margin-right: 10px;"></i>
+                    Send Us a Message
+                </h2>
+
+                <form id="contact-form" onsubmit="submitContactForm(event)">
+                    <div style="display: grid; gap: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--fg);">Your
+                                    Name</label>
+                                <input type="text" class="input-field" placeholder="John Doe" required
+                                    style="animation: slideUp 0.3s ease-out;">
+                            </div>
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--fg);">Email
+                                    Address</label>
+                                <input type="email" class="input-field" placeholder="john@example.com" required
+                                    style="animation: slideUp 0.4s ease-out;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--fg);">Subject</label>
+                            <select class="input-field" required style="animation: slideUp 0.5s ease-out;">
+                                <option value="">Select a topic...</option>
+                                <option value="support">Technical Support</option>
+                                <option value="feature">Feature Request</option>
+                                <option value="bug">Report a Bug</option>
+                                <option value="feedback">General Feedback</option>
+                                <option value="partnership">Partnership Inquiry</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--fg);">Your
+                                Message</label>
+                            <textarea class="input-field" placeholder="How can we help you today?" rows="5" required
+                                style="animation: slideUp 0.6s ease-out;"></textarea>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                            <input type="checkbox" id="newsletter" checked style="width: 20px; height: 20px;">
+                            <label for="newsletter" style="color: var(--muted-2);">
+                                Subscribe to our health tips newsletter
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="animation: slideUp 0.7s ease-out;">
+                            <i data-lucide="send"></i> Send Message & Earn 10 XP!
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="card" style="margin-bottom: 40px;">
+            <div class="card-content" style="padding: 40px;">
+                <h2 style="text-align: center; margin-bottom: 30px; color: var(--fg);">
+                    <i data-lucide="help-circle" style="margin-right: 10px;"></i>
+                    Frequently Asked Questions
+                </h2>
+
+                <div id="faq-list">
+                    <div class="faq-item" onclick="toggleFAQ(this)" style="animation: slideUp 0.1s ease-out;">
+                        <div class="faq-question">
+                            <span>How do I reset my password?</span>
+                            <i data-lucide="chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Go to Settings → Account → Change Password. You'll receive an email with reset instructions.
+                            For security, we use two-factor authentication.
+                        </div>
+                    </div>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)" style="animation: slideUp 0.2s ease-out;">
+                        <div class="faq-question">
+                            <span>Is my health data secure?</span>
+                            <i data-lucide="chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Absolutely! We use bank-level encryption (AES-256) and never share your data without
+                            explicit consent. Your privacy is our top priority.
+                        </div>
+                    </div>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)" style="animation: slideUp 0.3s ease-out;">
+                        <div class="faq-question">
+                            <span>How does the gamification work?</span>
+                            <i data-lucide="chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            You earn XP for completing health tasks, maintaining streaks, and achieving goals. Level up
+                            to unlock badges and rewards!
+                        </div>
+                    </div>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)" style="animation: slideUp 0.4s ease-out;">
+                        <div class="faq-question">
+                            <span>Can I share my progress with my doctor?</span>
+                            <i data-lucide="chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Yes! Go to Progress → Share → Send to Doctor. You can export ABDM-compatible reports for
+                            seamless sharing with healthcare providers.
+                        </div>
+                    </div>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)" style="animation: slideUp 0.5s ease-out;">
+                        <div class="faq-question">
+                            <span>What devices are supported?</span>
+                            <i data-lucide="chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            COMPASS works on all modern smartphones, tablets, and computers. We also integrate with
+                            popular health devices and wearables.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team -->
+        <div class="card" style="margin-bottom: 40px;">
+            <div class="card-content" style="padding: 40px;">
+                <h2 style="text-align: center; margin-bottom: 30px; color: var(--fg);">
+                    <i data-lucide="users" style="margin-right: 10px;"></i>
+                    Meet Our Support Team
+                </h2>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            👩‍💼
+                        </div>
+                        <h3 style="margin-bottom: 5px; color: var(--fg);">Sarah Johnson</h3>
+                        <p style="color: var(--accent-1); margin-bottom: 5px;">Support Lead</p>
+                        <p style="color: var(--muted-2); font-size: 14px;">8 years in health tech</p>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            👨‍⚕️
+                        </div>
+                        <h3 style="margin-bottom: 5px; color: var(--fg);">Dr. Arjun Patel</h3>
+                        <p style="color: var(--accent-2); margin-bottom: 5px;">Medical Advisor</p>
+                        <p style="color: var(--muted-2); font-size: 14px;">Cardiologist & Health Coach</p>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            👩‍💻
+                        </div>
+                        <h3 style="margin-bottom: 5px; color: var(--fg);">Maya Sharma</h3>
+                        <p style="color: var(--accent-3); margin-bottom: 5px;">Tech Support</p>
+                        <p style="color: var(--muted-2); font-size: 14px;">Bug hunter & problem solver</p>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            👨‍🎨
+                        </div>
+                        <h3 style="margin-bottom: 5px; color: var(--fg);">Alex Chen</h3>
+                        <p style="color: var(--ok); margin-bottom: 5px;">UX Designer</p>
+                        <p style="color: var(--muted-2); font-size: 14px;">Making things beautiful & usable</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="card" style="margin-bottom: 40px;">
+            <div class="card-content" style="padding: 40px; text-align: center;">
+                <h2 style="margin-bottom: 20px; color: var(--fg);">Connect With Us</h2>
+                <p style="color: var(--muted-2); margin-bottom: 30px;">Stay updated with health tips, updates, and
+                    community stories</p>
+
+                <div class="social-links">
+                    <a href="#" class="social-link" style="background: linear-gradient(135deg, #1877F2, #0A5BC4);"
+                        title="Facebook">
+                        <i data-lucide="facebook"></i>
+                    </a>
+                    <a href="#" class="social-link" style="background: linear-gradient(135deg, #1DA1F2, #0C8BD9);"
+                        title="Twitter">
+                        <i data-lucide="twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" style="background: linear-gradient(135deg, #E4405F, #C13584);"
+                        title="Instagram">
+                        <i data-lucide="instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" style="background: linear-gradient(135deg, #25D366, #128C7E);"
+                        title="WhatsApp">
+                        <i data-lucide="message-circle"></i>
+                    </a>
+                    <a href="#" class="social-link" style="background: linear-gradient(135deg, #FF0000, #CC0000);"
+                        title="YouTube">
+                        <i data-lucide="youtube"></i>
+                    </a>
+                </div>
+
+                <div style="margin-top: 30px; color: var(--muted-2); font-size: 14px;">
+                    <i data-lucide="map-pin" style="margin-right: 8px;"></i>
+                    Health Tech Hub, Bangalore, India • 560001
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="about.html" class="nav-item">
+            <i data-lucide="info"></i>
+            <span>About</span>
+        </a>
+
+        <div class="sos-button" onmousedown="startSOSCountdown()"
+            onmouseup='this.innerHTML = "<i data-lucide=\"siren\"></i>"' ontouchstart="startSOSCountdown()"
+            ontouchend='this.innerHTML = "<i data-lucide=\" siren\"></i>"''>
+            <i data-lucide="siren"></i>
+        </div>
+
+        <a href="contact.html" class="nav-item active">
+            <i data-lucide="phone"></i>
+            <span>Contact</span>
+        </a>
+        <a href="feedback.html" class="nav-item">
+            <i data-lucide="message-square"></i>
+            <span>Feedback</span>
+        </a>
+    </nav>
+
+    <script>
+        // Contact page functionality
+        function startLiveChat() {
+            const chatWindow = document.createElement(' div'); chatWindow.style.cssText = ` position: fixed; bottom:
+            100px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 20px; box-shadow: 0 20px
+            60px rgba(0,0,0,0.3); z-index: 1001; display: flex; flex-direction: column; border: 3px solid
+            var(--accent-1); animation: slideUp 0.3s ease-out; `; chatWindow.innerHTML = ` <div
+            style="padding: 20px; background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); color: white; border-radius: 17px 17px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: bold; font-size: 16px;">
+                <i data-lucide="message-circle" style="margin-right: 8px;"></i>
+                Live Chat with Sarah
+            </div>
+            <button onclick="this.closest('div').remove()"
+                style="background: none; border: none; color: white; cursor: pointer;">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+
+        <div style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; gap: 10px;">
+                <div
+                    style="width: 40px; height: 40px; background: var(--accent-1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="user" style="color: white;"></i>
+                </div>
+                <div style="padding: 12px; background: rgba(139, 92, 246, 0.1); border-radius: 15px; max-width: 70%;">
+                    Hi there! I'm Sarah. How can I help you today? <span class="wave">👋</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 15px; border-top: 2px solid var(--card-border); display: flex; gap: 10px;">
+            <input type="text" placeholder="Type your message..."
+                style="flex: 1; padding: 12px; border: 2px solid var(--card-border); border-radius: 15px; outline: none;">
+            <button
+                style="background: var(--accent-1); color: white; border: none; border-radius: 15px; width: 50px; cursor: pointer;">
+                <i data-lucide="send"></i>
+            </button>
+        </div>
+        `;
+
+            document.body.appendChild(chatWindow);
+
+            // Add Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Animate wave emoji
+            const waveEmoji = chatWindow.querySelector('.wave');
+            setInterval(() => {
+                waveEmoji.style.animation = 'wave 1s ease-in-out infinite';
+            }, 2000);
+        }
+
+        function toggleFAQ(faqElement) {
+            const isActive = faqElement.classList.contains('active');
+
+            // Close all other FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('i').setAttribute('data-lucide', 'chevron-down');
+            });
+
+            // Toggle current FAQ
+            if (!isActive) {
+                faqElement.classList.add('active');
+                faqElement.querySelector('i').setAttribute('data-lucide', 'chevron-up');
+            }
+
+            // Refresh icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function submitContactForm(event) {
+            event.preventDefault();
+
+            // Show sending animation
+            const submitBtn = event.target.querySelector('.btn-primary');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i data-lucide="loader" class="spinning"></i> Sending...';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i data-lucide="check-circle"></i> Message Sent!';
+                submitBtn.style.background = 'linear-gradient(135deg, var(--ok), #34D399)';
+
+                // Show XP gain
+                showXPGain(10, submitBtn);
+                triggerConfetti();
+
+                // Show success message
+                alert('🎉 Thank you for reaching out! We\'ll get back to you within 24 hours. You earned 10 XP!');
+
+                // Reset form
+                event.target.reset();
+
+                // Reset button after delay
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                }, 2000);
+            }, 2000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add animations to contact cards
+            document.querySelectorAll('.contact-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Add animations to team members
+            document.querySelectorAll('.team-member').forEach((member, index) => {
+                member.style.animationDelay = `${index * 0.1}s`;
+                if (!member.classList.contains('slide-up-animation')) {
+                    member.classList.add('slide-up-animation');
+                }
+            });
+
+            // Add hover animations to social links
+            document.querySelectorAll('.social-link').forEach(link => {
+                link.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-5px) scale(1.1)';
+                });
+                link.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Initialize first FAQ as open
+            const firstFAQ = document.querySelector('.faq-item');
+            if (firstFAQ) {
+                firstFAQ.classList.add('active');
+                firstFAQ.querySelector('i').setAttribute('data-lucide', 'chevron-up');
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

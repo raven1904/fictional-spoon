@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - Today's Tasks</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+    <script src="script.js" defer></script>
+    <style>
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .task-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-1);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.1);
+        }
+
+        .task-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--ok);
+        }
+
+        .task-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .checkmark {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--card-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .checkmark.checked {
+            background: var(--ok);
+            border-color: var(--ok);
+        }
+
+        .checkmark.checked i {
+            color: white;
+            opacity: 1;
+        }
+
+        .task-time {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--accent-1);
+            margin-left: auto;
+        }
+
+        .add-task-form {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .progress-circle svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-circle circle {
+            fill: none;
+            stroke-width: 8;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+
+<body data-theme="neon">
+    <!-- Header -->
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="user-info">
+                <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                    <i data-lucide="list-checks"></i>
+                </div>
+                <div class="greeting">
+                    <h1>Today's Health Tasks <span class="text-gradient float-animation"></span></h1>
+                    <p><i data-lucide="calendar"></i> Let's make today amazing!</p>
+                </div>
+            </div>
+
+            <!-- Settings Icon -->
+            <a href="settings.html" class="header-settings-icon" aria-label="Settings">
+                <i data-lucide="settings"></i>
+            </a>
+
+            <div class="header-controls">
+                <div class="xp-badge" style="animation: pulse 2s infinite;">
+                    <i data-lucide="star"></i> +50 XP Available
+                </div>
+                <button class="btn-secondary" onclick="window.location.href='index.html'">
+                    <i data-lucide="arrow-left"></i> Home
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Your Health Milestones</h1>
+
+        <!-- Progress Overview -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-content"
+                style="padding: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="progress-circle">
+                        <svg>
+                            <circle cx="60" cy="60" r="52" stroke="rgba(139, 92, 246, 0.1)" stroke-width="8"></circle>
+                            <circle cx="60" cy="60" r="52" stroke="var(--ok)" stroke-width="8" stroke-dasharray="326.56"
+                                stroke-dashoffset="163.28" stroke-linecap="round"></circle>
+                        </svg>
+                        <div
+                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                            <div id="progress-percent" style="font-size: 28px; font-weight: 900;" class="text-gradient">50%</div>
+                            <div style="font-size: 12px; color: var(--muted-2);">Complete</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div id="tasks-count" style="font-size: 48px; font-weight: 900; line-height: 1;" class="text-gradient">3/6</div>
+                        <div style="color: var(--muted-2);">Tasks Completed</div>
+                    </div>
+                </div>
+
+                <div class="streak-badge" style="animation: float 3s ease-in-out infinite;">
+                    <i data-lucide="flame"></i> Complete all for 2x XP!
+                </div>
+            </div>
+        </div>
+
+        <!-- Add New Task -->
+        <div class="card add-task-form" style="margin-bottom: 30px;">
+            <div class="card-content" style="padding: 30px;">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: var(--fg);">
+                    <i data-lucide="plus-circle" style="color: var(--accent-1);"></i>
+                    Add New Health Task
+                </h2>
+
+                <div style="display: grid; gap: 15px;">
+                    <input type="text" class="input-field" placeholder="What's your health goal today? 💪"
+                        style="animation: slideUp 0.3s ease-out;">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <input type="time" class="input-field" value="10:00" style="animation: slideUp 0.4s ease-out;">
+                        <select class="input-field" style="animation: slideUp 0.5s ease-out;">
+                            <option value="">Select Type...</option>
+                            <option value="medication">💊 Medication</option>
+                            <option value="exercise">🏃 Exercise</option>
+                            <option value="vitals">❤️ Vitals Check</option>
+                            <option value="nutrition">🍎 Nutrition</option>
+                            <option value="hydration">💧 Hydration</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-primary" style="animation: slideUp 0.6s ease-out;">
+                        <i data-lucide="plus"></i> Add Task & Earn 5 XP!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-content" style="padding: 30px;">
+                <h2
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: var(--fg);">
+                    <span><i data-lucide="sun" style="margin-right: 10px;"></i>Today's Schedule</span>
+                    <div class="xp-badge">
+                        <i data-lucide="zap"></i> Quick Complete = Bonus XP!
+                    </div>
+                </h2>
+
+                <div id="task-list">
+                    <!-- Morning Tasks -->
+                    <div style="margin-bottom: 25px;">
+                        <h3
+                            style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--muted);">
+                            <i data-lucide="sunrise"></i>
+                            Morning Routine
+                        </h3>
+
+                        <div class="task-item completed" onclick="toggleTask(this)">
+                            <div class="task-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                                💊
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--fg);">Take Morning Medication</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Aspirin 75mg & Metformin 500mg
+                                </div>
+                            </div>
+                            <div class="checkmark checked">
+                                <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <div class="task-time">08:00 AM</div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <div class="task-icon" style="background: linear-gradient(135deg, #06B6D4, #38BDF8);">
+                                ❤️
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--fg);">Check Blood Pressure</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Sit comfortably for 5 mins before
+                                </div>
+                            </div>
+                            <div class="checkmark">
+                                <i data-lucide="check" style="width: 16px; height: 16px; opacity: 0;"></i>
+                            </div>
+                            <div class="task-time">08:30 AM</div>
+                        </div>
+                    </div>
+
+                    <!-- Afternoon Tasks -->
+                    <div style="margin-bottom: 25px;">
+                        <h3
+                            style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--muted);">
+                            <i data-lucide="sun"></i>
+                            Afternoon Activities
+                        </h3>
+
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <div class="task-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                                🚶
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--fg);">30-Minute Walk</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Light exercise around the park
+                                </div>
+                            </div>
+                            <div class="checkmark">
+                                <i data-lucide="check" style="width: 16px; height: 16px; opacity: 0;"></i>
+                            </div>
+                            <div class="task-time">04:00 PM</div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this)">
+                            <div class="task-icon" style="background: linear-gradient(135deg, #F97316, #FB7185);">
+                                💧
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--fg);">Hydration Reminder</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Drink 2 glasses of water</div>
+                            </div>
+                            <div class="checkmark">
+                                <i data-lucide="check" style="width: 16px; height: 16px; opacity: 0;"></i>
+                            </div>
+                            <div class="task-time">03:00 PM</div>
+                        </div>
+                    </div>
+
+                    <!-- Evening Tasks -->
+                    <div>
+                        <h3
+                            style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--muted);">
+                            <i data-lucide="moon"></i>
+                            Evening Routine
+                        </h3>
+
+                        <div class="task-item completed" onclick="toggleTask(this)">
+                            <div class="task-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                                💊
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--fg);">Take Evening Medication</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Lisinopril 10mg</div>
+                            </div>
+                            <div class="checkmark checked">
+                                <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <div class="task-time">08:00 PM</div>
+                        </div>
+
+                        <div class="task-item completed" onclick="toggleTask(this)">
+                            <div class="task-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                                📝
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--fg);">Daily Health Journal</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Reflect on today's progress</div>
+                            </div>
+                            <div class="checkmark checked">
+                                <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <div class="task-time">09:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips & Rewards -->
+        <div class="card" style="margin-bottom: 40px;">
+            <div class="card-content" style="padding: 30px;">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: var(--fg);">
+                    <i data-lucide="lightbulb" style="color: #FFD700;"></i>
+                    Pro Tips & Rewards
+                </h2>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="padding: 20px; background: rgba(139, 92, 246, 0.1); border-radius: 16px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <div
+                                style="width: 40px; height: 40px; background: var(--accent-1); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="zap" style="color: white;"></i>
+                            </div>
+                            <div style="font-weight: bold; color: var(--fg);">Quick Complete Bonus</div>
+                        </div>
+                        <p style="color: var(--muted-2); font-size: 14px;">Complete tasks within 15 mins of their
+                            scheduled time for +2 bonus XP!</p>
+                    </div>
+
+                    <div style="padding: 20px; background: rgba(6, 182, 212, 0.1); border-radius: 16px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <div
+                                style="width: 40px; height: 40px; background: var(--accent-2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="flame" style="color: white;"></i>
+                            </div>
+                            <div style="font-weight: bold; color: var(--fg);">Streak Multiplier</div>
+                        </div>
+                        <p style="color: var(--muted-2); font-size: 14px;">Maintain a 7-day streak for 2x XP on all
+                            tasks!</p>
+                    </div>
+
+                    <div style="padding: 20px; background: rgba(16, 185, 129, 0.1); border-radius: 16px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <div
+                                style="width: 40px; height: 40px; background: var(--ok); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="award" style="color: white;"></i>
+                            </div>
+                            <div style="font-weight: bold; color: var(--fg);">Daily Completion Reward</div>
+                        </div>
+                        <p style="color: var(--muted-2); font-size: 14px;">Complete all daily tasks to unlock a special
+                            badge!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="todo.html" class="nav-item active">
+            <i data-lucide="list-checks"></i>
+            <span>To-Do</span>
+        </a>
+
+        <div class="sos-button" onmousedown="startSOSCountdown()"
+            onmouseup='this.innerHTML = "<i data-lucide=\"siren\"></i>"' ontouchstart="startSOSCountdown()"
+            ontouchend='this.innerHTML = "<i data-lucide=\" siren\"></i>"''>
+            <i data-lucide="siren"></i>
+        </div>
+
+            <a href="progress.html" class="nav-item">
+                <i data-lucide="trending-up"></i>
+                <span>Progress</span>
+            </a>
+            <a href="gamification.html" class="nav-item">
+                <i data-lucide="gamepad-2"></i>
+                <span>Game</span>
+            </a>
+    </nav>
+
+    <script>
+        // Task completion functionality
+        let completedTasks = 3;
+        const totalTasks = 6;
+
+        function toggleTask(taskElement) {
+            const checkmark = taskElement.querySelector(' .checkmark'); const
+                isCompleted = checkmark.classList.contains('checked'); if (isCompleted) { // Uncomplete task
+                    checkmark.classList.remove('checked'); taskElement.classList.remove('completed'); completedTasks--; //
+            Remove XP badge if it exists const xpBadge = taskElement.querySelector('.xp-badge'); if (xpBadge)
+                        xpBadge.remove();
+                } else { // Complete task checkmark.classList.add('checked');
+                taskElement.classList.add('completed'); completedTasks++; // Show XP gain const
+                xpEarned = Math.floor(Math.random() * 5) + 5; // 5-10 XP showXPGain(xpEarned, taskElement); // Play sound and
+            confetti triggerConfetti(); // Check if all tasks are completed if (completedTasks===totalTasks) {
+                setTimeout(() => {
+                    alert('🎉 Amazing! All tasks completed! You earned a bonus 25 XP!');
+                    triggerConfetti();
+                    showXPGain(25, document.querySelector('.page-title'));
+                }, 500);
+            }
+        }
+
+        // Update progress
+        updateProgress();
+            }
+
+        function updateProgress() {
+            const percentage = (completedTasks / totalTasks) * 100;
+            const progressCircle = document.querySelector('.progress-circle circle:last-child');
+            const progressText = document.querySelector('.progress-circle .text-gradient');
+            const tasksCount = document.querySelector('.card-content .text-gradient:nth-child(2)');
+
+            if (progressCircle) {
+                const circumference = 2 * Math.PI * 52;
+                const offset = circumference - (percentage / 100) * circumference;
+                progressCircle.style.strokeDashoffset = offset;
+            }
+
+            if (progressText) {
+                progressText.textContent = `${Math.round(percentage)}%`;
+            }
+
+            if (tasksCount) {
+                tasksCount.textContent = `${completedTasks}/${totalTasks}`;
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function () {
+            updateProgress();
+
+            // Add animations to task items
+            document.querySelectorAll('.task-item').forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
+                if (!item.classList.contains('slide-up-animation')) {
+                    item.classList.add('slide-up-animation');
+                }
+            });
+
+            // Form submission
+            const form = document.querySelector('.add-task-form .btn-primary');
+            form.addEventListener('click', function (e) {
+                e.preventDefault();
+                alert('🎯 New task added! +5 XP');
+                showXPGain(5, this);
+                triggerConfetti();
+            });
+        });
+    </script>
+</body>
+
+</html>

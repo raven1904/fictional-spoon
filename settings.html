@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - Settings</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+    <script src="script.js" defer></script>
+    <style>
+        .settings-section {
+            margin-bottom: 40px;
+        }
+
+        .settings-card {
+            padding: 30px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+            border: 2px solid var(--card-border);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .settings-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, var(--muted-2), color-mix(in oklab, var(--muted-2) 50%, transparent));
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.toggle-slider {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .avatar-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .color-option:hover {
+            transform: scale(1.2);
+        }
+
+        .color-option.selected {
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border: 2px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .notification-item:hover {
+            border-color: var(--accent-1);
+            transform: translateX(5px);
+        }
+
+        .export-option {
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border: 2px solid var(--card-border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .export-option:hover {
+            border-color: var(--accent-1);
+            transform: translateY(-5px);
+        }
+
+        .danger-zone {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-5deg);
+            }
+
+            75% {
+                transform: rotate(5deg);
+            }
+        }
+
+        .wiggle {
+            animation: wiggle 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body data-theme="neon">
+    <!-- Header -->
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="user-info">
+                <div class="user-avatar" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                    <i data-lucide="settings"></i>
+                </div>
+                <div class="greeting">
+                    <h1>Settings & Preferences <span class="text-gradient float-animation">⚙️</span></h1>
+                    <p><i data-lucide="sliders"></i> Customize your COMPASS experience</p>
+                </div>
+            </div>
+
+            <!-- Home Icon (instead of settings since we're on settings page) -->
+            <a href="index.html" class="header-settings-icon" aria-label="Home">
+                <i data-lucide="home"></i>
+            </a>
+
+            <div class="header-controls">
+                <button class="btn-secondary" onclick="window.location.href='index.html'">
+                    <i data-lucide="arrow-left"></i> Home
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Personalize Your Experience</h1>
+
+        <!-- Profile Settings -->
+        <div class="settings-section">
+            <div class="settings-card">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; color: var(--fg);">
+                    <i data-lucide="user" style="color: var(--accent-1);"></i>
+                    Profile Settings
+                </h2>
+
+                <div style="display: grid; gap: 20px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--fg);">Your
+                            Name</label>
+                        <input type="text" class="input-field" value="Rohan Choure"
+                            style="animation: slideUp 0.3s ease-out;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--fg);">Health
+                            Conditions</label>
+                        <input type="text" class="input-field" value="Hypertension, Type 2 Diabetes"
+                            style="animation: slideUp 0.4s ease-out;">
+                    </div>
+
+                    <div>
+                        <label
+                            style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--fg);">Emergency
+                            Contact</label>
+                        <input type="text" class="input-field" value="Avinash Hugar - (555) 123-4567"
+                            style="animation: slideUp 0.5s ease-out;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: bold; color: var(--fg);">Profile
+                            Avatar</label>
+                        <div class="avatar-grid">
+                            <div class="avatar-option selected"
+                                style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);"
+                                onclick="selectAvatar(this)">👨</div>
+                            <div class="avatar-option" style="background: linear-gradient(135deg, #06B6D4, #38BDF8);"
+                                onclick="selectAvatar(this)">🧔</div>
+                            <div class="avatar-option" style="background: linear-gradient(135deg, #10B981, #34D399);"
+                                onclick="selectAvatar(this)">👴</div>
+                            <div class="avatar-option" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);"
+                                onclick="selectAvatar(this)">🧓</div>
+                            <div class="avatar-option" style="background: linear-gradient(135deg, #F97316, #FB7185);"
+                                onclick="selectAvatar(this)">👨‍⚕️</div>
+                            <div class="avatar-option" style="background: linear-gradient(135deg, #EF4444, #F87171);"
+                                onclick="selectAvatar(this)">🦸</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme & Appearance -->
+        <div class="settings-section">
+            <div class="settings-card">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; color: var(--fg);">
+                    <i data-lucide="palette" style="color: var(--accent-2);"></i>
+                    Theme & Appearance
+                </h2>
+
+                <div style="margin-bottom: 25px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <div>
+                            <div style="font-weight: bold; color: var(--fg);">Theme Selection</div>
+                            <div style="color: var(--muted-2); font-size: 14px;">Choose your favorite color scheme</div>
+                        </div>
+                        <select class="btn-secondary" id="theme-select">
+                            <option value="neon">Neon</option>
+                            <option value="pastel">Pastel</option>
+                            <option value="contrast">High Contrast</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <div class="color-option selected"
+                            style="background: linear-gradient(135deg, #8B5CF6, #06B6D4, #F97316);"
+                            onclick="selectColor(this)" title="Neon"></div>
+                        <div class="color-option"
+                            style="background: linear-gradient(135deg, #A78BFA, #38BDF8, #FB7185);"
+                            onclick="selectColor(this)" title="Pastel"></div>
+                        <div class="color-option"
+                            style="background: linear-gradient(135deg, #0066FF, #00D4AA, #FF6B00);"
+                            onclick="selectColor(this)" title="High Contrast"></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <div style="font-weight: bold; color: var(--fg);">Animations</div>
+                        <div style="color: var(--muted-2); font-size: 14px;">Playful animations & effects</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onclick="toggleAnimations(this)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: bold; color: var(--fg);">Confetti Effects</div>
+                        <div style="color: var(--muted-2); font-size: 14px;">Celebrate achievements with confetti</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onclick="toggleConfetti(this)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="settings-section">
+            <div class="settings-card">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; color: var(--fg);">
+                    <i data-lucide="bell" style="color: var(--warn);"></i>
+                    Notifications
+                </h2>
+
+                <div style="margin-bottom: 20px;">
+                    <div class="notification-item">
+                        <div>
+                            <div style="font-weight: bold; color: var(--fg);">Medication Reminders</div>
+                            <div style="color: var(--muted-2); font-size: 14px;">Get notified when it's time for
+                                medication</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-item">
+                        <div>
+                            <div style="font-weight: bold; color: var(--fg);">Task Reminders</div>
+                            <div style="color: var(--muted-2); font-size: 14px;">Reminders for scheduled health tasks
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-item">
+                        <div>
+                            <div style="font-weight: bold; color: var(--fg);">Achievement Alerts</div>
+                            <div style="color: var(--muted-2); font-size: 14px;">Celebrate when you earn badges or level
+                                up</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-item">
+                        <div>
+                            <div style="font-weight: bold; color: var(--fg);">Health Tips</div>
+                            <div style="color: var(--muted-2); font-size: 14px;">Daily health tips and recommendations
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div
+                    style="color: var(--muted-2); font-size: 14px; padding: 15px; background: rgba(139, 92, 246, 0.1); border-radius: 15px;">
+                    <i data-lucide="info" style="margin-right: 8px;"></i>
+                    Notifications are sent at appropriate times to avoid disturbance
+                </div>
+            </div>
+        </div>
+
+        <!-- Data & Privacy -->
+        <div class="settings-section">
+            <div class="settings-card">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; color: var(--fg);">
+                    <i data-lucide="shield" style="color: var(--ok);"></i>
+                    Data & Privacy
+                </h2>
+
+                <div style="margin-bottom: 20px;">
+                    <div class="export-option" onclick="exportData('health')">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div
+                                style="width: 50px; height: 50px; background: linear-gradient(135deg, #8B5CF6, #A78BFA); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="activity" style="color: white;"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; color: var(--fg);">Export Health Data</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Download your complete health
+                                    history in ABDM format</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="export-option" onclick="exportData('medication')">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div
+                                style="width: 50px; height: 50px; background: linear-gradient(135deg, #06B6D4, #38BDF8); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="pill" style="color: white;"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; color: var(--fg);">Export Medication History</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Detailed report of all medications
+                                    taken</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="export-option" onclick="exportData('progress')">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div
+                                style="width: 50px; height: 50px; background: linear-gradient(135deg, #10B981, #34D399); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="trending-up" style="color: white;"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; color: var(--fg);">Export Progress Report</div>
+                                <div style="color: var(--muted-2); font-size: 14px;">Comprehensive progress analytics
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <div style="font-weight: bold; color: var(--fg);">Data Sharing with Doctor</div>
+                        <div style="color: var(--muted-2); font-size: 14px;">Allow your doctor to view your progress
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: bold; color: var(--fg);">Anonymous Data for Research</div>
+                        <div style="color: var(--muted-2); font-size: 14px;">Help improve COMPASS for everyone</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="settings-section">
+            <div class="settings-card danger-zone">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; color: #EF4444;">
+                    <i data-lucide="alert-triangle" style="color: #EF4444;"></i>
+                    Danger Zone
+                </h2>
+
+                <div style="margin-bottom: 20px;">
+                    <div
+                        style="padding: 20px; background: rgba(239, 68, 68, 0.1); border-radius: 15px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; color: #EF4444; margin-bottom: 5px;">Reset All Data</div>
+                        <div style="color: #EF4444; font-size: 14px; opacity: 0.8;">This will delete all your progress,
+                            badges, and settings</div>
+                    </div>
+
+                    <div style="padding: 20px; background: rgba(239, 68, 68, 0.1); border-radius: 15px;">
+                        <div style="font-weight: bold; color: #EF4444; margin-bottom: 5px;">Delete Account</div>
+                        <div style="color: #EF4444; font-size: 14px; opacity: 0.8;">Permanently delete your COMPASS
+                            account</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <button class="btn-secondary" onclick="resetData()"
+                        style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: #EF4444;">
+                        <i data-lucide="refresh-cw"></i> Reset Data
+                    </button>
+                    <button class="btn-secondary" onclick="deleteAccount()"
+                        style="background: rgba(239, 68, 68, 0.2); color: #EF4444; border-color: #EF4444;">
+                        <i data-lucide="trash-2"></i> Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- About COMPASS -->
+        <div class="settings-section">
+            <div class="settings-card">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; color: var(--fg);">
+                    <i data-lucide="info" style="color: var(--accent-3);"></i>
+                    About COMPASS
+                </h2>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div
+                            style="width: 60px; height: 60px; background: linear-gradient(135deg, #8B5CF6, #06B6D4, #F97316); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="compass" style="color: white;"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: var(--fg);">COMPASS Health</div>
+                            <div style="color: var(--muted-2);">Version 5.0 • Build 2024.12</div>
+                        </div>
+                    </div>
+
+                    <div style="color: var(--muted-2); line-height: 1.6; margin-bottom: 20px;">
+                        COMPASS is your personal health companion that makes managing your health fun and rewarding
+                        through gamification and intuitive design.
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <button class="btn-secondary" onclick="window.location.href='about.html'">
+                        <i data-lucide="book-open"></i> About Us
+                    </button>
+                    <button class="btn-secondary" onclick="window.location.href='contact.html'">
+                        <i data-lucide="phone"></i> Contact Support
+                    </button>
+                    <button class="btn-secondary" onclick="window.location.href='feedback.html'">
+                        <i data-lucide="message-square"></i> Send Feedback
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="text-align: center; margin: 40px 0;">
+            <button class="btn-primary" style="padding: 20px 40px; font-size: 18px;" onclick="saveSettings()">
+                <i data-lucide="save"></i> Save All Changes
+            </button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="todo.html" class="nav-item">
+            <i data-lucide="list-checks"></i>
+            <span>To-Do</span>
+        </a>
+
+        <div class="sos-button" onmousedown="startSOSCountdown()"
+            onmouseup='this.innerHTML = "<i data-lucide=\"siren\"></i>"' ontouchstart="startSOSCountdown()"
+            ontouchend='this.innerHTML = "<i data-lucide=\" siren\"></i>"'>
+            <i data-lucide="siren"></i>
+        </div>
+
+        <a href="progress.html" class="nav-item">
+            <i data-lucide="trending-up"></i>
+            <span>Progress</span>
+        </a>
+        <a href="settings.html" class="nav-item active">
+            <i data-lucide="settings"></i>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <script>
+        // Settings page functionality
+        let currentAvatar = 0;
+        let animationsEnabled = true;
+        let confettiEnabled = true;
+
+        function selectAvatar(avatarElement) {
+            // Remove selected class from all avatars
+            document.querySelectorAll('.avatar-option').forEach(avatar => {
+                avatar.classList.remove('selected');
+            });
+
+            // Add selected class to clicked avatar
+            avatarElement.classList.add('selected');
+
+            // Get avatar index
+            const avatars = Array.from(document.querySelectorAll('.avatar-option'));
+            currentAvatar = avatars.indexOf(avatarElement);
+
+            // Add wiggle animation
+            avatarElement.classList.add('wiggle');
+            setTimeout(() => {
+                avatarElement.classList.remove('wiggle');
+            }, 500);
+
+            // Update user avatar in header (if on same page)
+            const userAvatar = document.querySelector('.user-avatar');
+            if (userAvatar) {
+                userAvatar.innerHTML = avatarElement.textContent;
+            }
+        }
+
+        function selectColor(colorElement) {
+            // Remove selected class from all colors
+            document.querySelectorAll('.color-option').forEach(color => {
+                color.classList.remove('selected');
+            });
+
+            // Add selected class to clicked color
+            colorElement.classList.add('selected');
+
+            // Get color scheme based on title
+            const scheme = colorElement.getAttribute('title').toLowerCase();
+            if (scheme) {
+                document.body.setAttribute('data-theme', scheme);
+                document.getElementById('theme-select').value = scheme;
+                localStorage.setItem('compassTheme', scheme);
+
+                // Add bounce animation
+                colorElement.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    colorElement.style.transform = 'scale(1.2)';
+                }, 300);
+            }
+        }
+
+        function toggleAnimations(checkbox) {
+            animationsEnabled = checkbox.checked;
+            if (!animationsEnabled) {
+                // Disable animations
+                document.body.classList.add('no-animations');
+                alert('Animations disabled. Page will feel faster but less playful!');
+            } else {
+                // Enable animations
+                document.body.classList.remove('no-animations');
+                alert('Animations enabled! Enjoy the playful experience! 🎉');
+            }
+        }
+
+        function toggleConfetti(checkbox) {
+            confettiEnabled = checkbox.checked;
+            if (confettiEnabled) {
+                alert('Confetti enabled! Get ready for celebrations! 🎊');
+            } else {
+                alert('Confetti disabled. Quiet mode activated.');
+            }
+        }
+
+        function exportData(type) {
+            const messages = {
+                'health': 'Health Data',
+                'medication': 'Medication History',
+                'progress': 'Progress Report'
+            };
+
+            alert(`📥 Preparing ${messages[type]} export...\n\nYour file will download shortly.`);
+
+            // Simulate download
+            setTimeout(() => {
+                alert(`✅ ${messages[type]} exported successfully!\n\nFile: COMPASS_${type}_export_${new Date().toISOString().split('T')[0]}.json`);
+            }, 1500);
+        }
+
+        function resetData() {
+            if (confirm('⚠️ Are you sure you want to reset ALL data?\n\nThis will delete all your progress, badges, and settings. This action cannot be undone!')) {
+                if (confirm('🚨 LAST WARNING: This will permanently delete:\n• All health data\n• Progress and achievements\n• Game stats and badges\n• Custom settings\n\nType "RESET" to confirm:')) {
+                    const userInput = prompt('Type "RESET" to confirm:');
+                    if (userInput === 'RESET') {
+                        alert('🧹 Resetting all data...');
+                        setTimeout(() => {
+                            alert('✅ All data has been reset. The page will now refresh.');
+                            window.location.reload();
+                        }, 2000);
+                    }
+                }
+            }
+        }
+
+        function deleteAccount() {
+            alert('🚨 Account deletion is a serious action.\n\nPlease contact support at support@compass.health for account deletion requests.');
+        }
+
+        function saveSettings() {
+            // Show saving animation
+            const saveBtn = document.querySelector('.btn-primary');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i data-lucide="loader" class="spinning"></i> Saving...';
+            saveBtn.disabled = true;
+
+            // Simulate save delay
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i data-lucide="check-circle"></i> Saved Successfully!';
+                saveBtn.style.background = 'linear-gradient(135deg, var(--ok), #34D399)';
+
+                // Show celebration
+                if (confettiEnabled) {
+                    triggerConfetti();
+                }
+
+                // Reset button after delay
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.style.background = '';
+                    saveBtn.disabled = false;
+                    alert('✅ All settings saved successfully!');
+                }, 2000);
+            }, 1500);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add animations to settings cards
+            document.querySelectorAll('.settings-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Add click animations to interactive elements
+            document.querySelectorAll('.avatar-option, .color-option, .export-option').forEach(element => {
+                element.addEventListener('click', function () {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Initialize theme from localStorage
+            const savedTheme = localStorage.getItem('compassTheme') || 'neon';
+            document.body.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-select').value = savedTheme;
+
+            // Select corresponding color option
+            const colorOptions = document.querySelectorAll('.color-option');
+            colorOptions.forEach(option => {
+                if (option.getAttribute('title').toLowerCase() === savedTheme) {
+                    option.classList.add('selected');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

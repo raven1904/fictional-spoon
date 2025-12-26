@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - About Us</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+    <script src="script.js" defer></script>
+    <style>
+        .mission-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .team-member {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .value-item {
+            padding: 25px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .value-item:hover {
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-hearts {
+            position: absolute;
+            font-size: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body data-theme="neon">
+    <!-- Header -->
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="user-info">
+                <div class="user-avatar" style="background: linear-gradient(135deg, #FF6B00, #FF9500);">
+                    <i data-lucide="compass"></i>
+                </div>
+                <div class="greeting">
+                    <h1>About COMPASS <span class="text-gradient float-animation">🧭</span></h1>
+                    <p><i data-lucide="heart"></i> Guiding you to better health</p>
+                </div>
+            </div>
+
+            <!-- Settings Icon -->
+            <a href="settings.html" class="header-settings-icon" aria-label="Settings">
+                <i data-lucide="settings"></i>
+            </a>
+
+            <div class="header-controls">
+                <button class="btn-secondary" onclick="window.location.href='index.html'">
+                    <i data-lucide="arrow-left"></i> Back Home
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Our Mission & Vision</h1>
+
+        <!-- Hero Section -->
+        <div class="card mission-card" style="margin-bottom: 40px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 20px; right: 20px;">
+                <span class="floating-hearts" style="animation-delay: 0s;">❤️</span>
+                <span class="floating-hearts" style="animation-delay: 0.5s; left: 30px;">🌟</span>
+                <span class="floating-hearts" style="animation-delay: 1s; left: 60px;">🎯</span>
+            </div>
+
+            <div class="card-content" style="padding: 40px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 60px; margin-bottom: 20px;">🧭</div>
+                    <h2 style="font-size: 32px; margin-bottom: 20px; color: var(--fg);">
+                        Making Health Management Fun & Rewarding!
+                    </h2>
+                    <p
+                        style="font-size: 18px; line-height: 1.6; color: var(--muted); max-width: 800px; margin: 0 auto;">
+                        COMPASS transforms your health journey into an exciting adventure.
+                        We combine cutting-edge technology with gamification to make
+                        managing your health enjoyable, engaging, and effective.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Values -->
+        <div style="margin-bottom: 40px;">
+            <h2 style="text-align: center; margin-bottom: 30px; font-size: 28px; color: var(--fg);">
+                <i data-lucide="star" style="margin-right: 10px;"></i>
+                Our Core Values
+            </h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="value-item">
+                    <div style="font-size: 40px; margin-bottom: 15px;">🎮</div>
+                    <h3 style="margin-bottom: 10px; color: var(--fg);">Playful Health</h3>
+                    <p style="color: var(--muted-2);">Making health management fun through gamification</p>
+                </div>
+
+                <div class="value-item">
+                    <div style="font-size: 40px; margin-bottom: 15px;">❤️</div>
+                    <h3 style="margin-bottom: 10px; color: var(--fg);">User-Centered</h3>
+                    <p style="color: var(--muted-2);">Designed with real people's needs in mind</p>
+                </div>
+
+                <div class="value-item">
+                    <div style="font-size: 40px; margin-bottom: 15px;">🚀</div>
+                    <h3 style="margin-bottom: 10px; color: var(--fg);">Innovation</h3>
+                    <p style="color: var(--muted-2);">Constantly evolving with technology</p>
+                </div>
+
+                <div class="value-item">
+                    <div style="font-size: 40px; margin-bottom: 15px;">🤝</div>
+                    <h3 style="margin-bottom: 10px; color: var(--fg);">Community</h3>
+                    <p style="color: var(--muted-2);">Supporting each other's health journeys</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team -->
+        <div class="card" style="margin-bottom: 40px;">
+            <div class="card-content" style="padding: 40px;">
+                <h2 style="text-align: center; margin-bottom: 30px; font-size: 28px; color: var(--fg);">
+                    <i data-lucide="users" style="margin-right: 10px;"></i>
+                    Meet Our Team
+                </h2>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+                    <div class="team-member">
+                        <div
+                            style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px;">
+                            👨‍⚕️
+                        </div>
+                        <h3 style="text-align: center; margin-bottom: 5px; color: var(--fg);">Dr. Rohan</h3>
+                        <p style="text-align: center; color: var(--muted-2);">Medical Director</p>
+                    </div>
+
+                    <div class="team-member">
+                        <div
+                            style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--accent-3), #FF6B00); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px;">
+                            👩‍💻
+                        </div>
+                        <h3 style="text-align: center; margin-bottom: 5px; color: var(--fg);">Sarah Tech</h3>
+                        <p style="text-align: center; color: var(--muted-2);">Lead Developer</p>
+                    </div>
+
+                    <div class="team-member">
+                        <div
+                            style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--ok), #10B981); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px;">
+                            👨‍🎨
+                        </div>
+                        <h3 style="text-align: center; margin-bottom: 5px; color: var(--fg);">Alex Design</h3>
+                        <p style="text-align: center; color: var(--muted-2);">UX Designer</p>
+                    </div>
+
+                    <div class="team-member">
+                        <div
+                            style="width: 100px; height: 100px; background: linear-gradient(135deg, #FFD700, #FFA500); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px;">
+                            👩‍🔬
+                        </div>
+                        <h3 style="text-align: center; margin-bottom: 5px; color: var(--fg);">Dr. Priya</h3>
+                        <p style="text-align: center; color: var(--muted-2);">Research Lead</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="card" style="margin-bottom: 40px;">
+            <div class="card-content" style="padding: 40px;">
+                <h2 style="text-align: center; margin-bottom: 30px; font-size: 28px; color: var(--fg);">
+                    <i data-lucide="bar-chart" style="margin-right: 10px;"></i>
+                    By The Numbers
+                </h2>
+
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 30px; text-align: center;">
+                    <div>
+                        <p style="font-size: 48px; font-weight: 900; margin-bottom: 10px;" class="text-gradient">10K+
+                        </p>
+                        <p style="color: var(--muted-2);">Active Users</p>
+                    </div>
+
+                    <div>
+                        <p style="font-size: 48px; font-weight: 900; margin-bottom: 10px;" class="text-gradient">95%</p>
+                        <p style="color: var(--muted-2);">Satisfaction Rate</p>
+                    </div>
+
+                    <div>
+                        <p style="font-size: 48px; font-weight: 900; margin-bottom: 10px;" class="text-gradient">2.5M
+                        </p>
+                        <p style="color: var(--muted-2);">Health Tasks Completed</p>
+                    </div>
+
+                    <div>
+                        <p style="font-size: 48px; font-weight: 900; margin-bottom: 10px;" class="text-gradient">24/7
+                        </p>
+                        <p style="color: var(--muted-2);">Support Available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h2 style="margin-bottom: 20px; color: var(--fg);">Join Our Health Revolution!</h2>
+            <button class="btn-primary" style="font-size: 18px; padding: 20px 40px;"
+                onclick="window.location.href='feedback.html'">
+                <i data-lucide="message-square"></i> Share Your Story
+            </button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="about.html" class="nav-item active">
+            <i data-lucide="info"></i>
+            <span>About</span>
+        </a>
+
+        <div class="sos-button" onmousedown="startSOSCountdown()"
+            onmouseup='this.innerHTML = "<i data-lucide=\"siren\"></i>"' ontouchstart="startSOSCountdown()"
+            ontouchend='this.innerHTML = "<i data-lucide=\"siren\"></i>"'>
+            <i data-lucide="siren"></i>
+        </div>
+
+        <a href="contact.html" class="nav-item">
+            <i data-lucide="phone"></i>
+            <span>Contact</span>
+        </a>
+        <a href="feedback.html" class="nav-item">
+            <i data-lucide="message-square"></i>
+            <span>Feedback</span>
+        </a>
+    </nav>
+
+    <script>
+        // Add floating animations
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add floating effect to team members
+            const teamMembers = document.querySelectorAll('.team-member');
+            teamMembers.forEach((member, index) => {
+                member.style.animationDelay = `${index * 0.2}s`;
+                if (!member.classList.contains('float-animation')) {
+                    member.classList.add('float-animation');
+                }
+            });
+
+            // Add count-up animation to stats
+            const stats = document.querySelectorAll('.text-gradient');
+            stats.forEach(stat => {
+                const originalText = stat.textContent;
+                stat.textContent = '0';
+
+                let count = 0;
+                const target = parseInt(originalText.replace(/[^0-9]/g, ''));
+                const increment = target / 50;
+
+                const timer = setInterval(() => {
+                    count += increment;
+                    if (count >= target) {
+                        count = target;
+                        clearInterval(timer);
+                    }
+                    stat.textContent = Math.floor(count).toLocaleString() + originalText.replace(/[0-9]/g, '');
+                }, 30);
+            });
+        });
+    </script>
+</body>
+
+</html>

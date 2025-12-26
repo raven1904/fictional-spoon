@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - Health Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+
+<style>
+
+</style>
+
+<body data-theme="neon">
+    <!-- Header -->
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i data-lucide="compass"></i>
+                </div>
+                <div class="greeting">
+                    <h1>Hello, Rohan! <span class="text-gradient float-animation">👋</span></h1>
+                    <p><i data-lucide="sun"></i> <span id="greeting">Good Morning!</span> • <span
+                            id="current-time">08:30
+                            AM</span></p>
+                </div>
+            </div>
+
+            <!-- Settings Icon -->
+            <a href="settings.html" class="header-settings-icon" aria-label="Settings">
+                <i data-lucide="settings"></i>
+            </a>
+
+            <div class="header-controls">
+                <div class="level-badge">
+                    <i data-lucide="award"></i> Level 5
+                </div>
+                <select id="theme-select" class="btn-secondary">
+                    <option value="neon">Neon</option>
+                    <option value="pastel">Pastel</option>
+                    <option value="contrast">High Contrast</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Vitals Display -->
+        <div class="vitals-display"
+            style="margin-top: 20px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <div class="vital-item">
+                <i data-lucide="heart" style="color: var(--danger)"></i>
+                <span style="font-weight: bold;">72</span> BPM
+            </div>
+            <div class="vital-item">
+                <i data-lucide="thermometer" style="color: var(--warn)"></i>
+                <span style="font-weight: bold;">130/80</span> mmHg
+            </div>
+            <div class="vital-item">
+                <i data-lucide="droplet" style="color: var(--accent-1)"></i>
+                <span style="font-weight: bold;">105</span> mg/dL
+            </div>
+            <div class="vital-item">
+                <i data-lucide="wind" style="color: var(--ok)"></i>
+                <span style="font-weight: bold;">97</span> SpO₂
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Health Dashboard</h1>
+
+        <!-- Compliance Score -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-content" style="padding: 30px;">
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <i data-lucide="gauge-circle" style="color: var(--accent-1)"></i>
+                    Today's Compliance Score
+                </h2>
+                <div class="progress-container" style="margin-bottom: 15px;">
+                    <div class="progress-bar" style="width: 85%"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 48px; font-weight: 900;" class="text-gradient">85%</span>
+                    <div class="xp-badge">
+                        <i data-lucide="star"></i> +15 XP Today
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-content" style="padding: 30px;">
+                <h2 style="margin-bottom: 20px;">Quick Actions</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
+                    <button class="btn-primary" onclick="window.location.href='todo.html'">
+                        <i data-lucide="list-checks"></i> Today's Tasks
+                    </button>
+                    <button class="btn-secondary" onclick="window.location.href='progress.html'">
+                        <i data-lucide="trending-up"></i> Progress
+                    </button>
+                    <button class="btn-secondary" onclick="window.location.href='gamification.html'">
+                        <i data-lucide="gamepad-2"></i> Health Game
+                    </button>
+                    <button class="btn-primary" onclick="window.location.href='feedback.html'">
+                        <i data-lucide="message-square"></i> Give Feedback
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-content" style="padding: 30px;">
+                <h2 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span>Recent Activity</span>
+                    <div class="streak-badge">
+                        <i data-lucide="flame"></i> 3 Day Streak
+                    </div>
+                </h2>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="activity-item"
+                        style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(139, 92, 246, 0.1); border-radius: 16px;">
+                        <div
+                            style="width: 40px; height: 40px; background: var(--ok); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="check-circle" style="color: white;"></i>
+                        </div>
+                        <div>
+                            <p style="font-weight: bold;">Morning Medication Taken</p>
+                            <p style="color: var(--muted-2); font-size: 14px;">08:00 AM • +10 XP</p>
+                        </div>
+                    </div>
+                    <div class="activity-item"
+                        style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(6, 182, 212, 0.1); border-radius: 16px;">
+                        <div
+                            style="width: 40px; height: 40px; background: var(--accent-2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="activity" style="color: white;"></i>
+                        </div>
+                        <div>
+                            <p style="font-weight: bold;">BP Check Completed</p>
+                            <p style="color: var(--muted-2); font-size: 14px;">08:30 AM • +5 XP</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Cards -->
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            <div class="card">
+                <div class="card-content" style="padding: 25px;">
+                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <i data-lucide="pill" style="color: var(--accent-1)"></i>
+                        Medication Tracker
+                    </h3>
+                    <p style="font-size: 36px; font-weight: 900; margin-bottom: 10px;" class="text-gradient">2/3</p>
+                    <p style="color: var(--muted-2); margin-bottom: 15px;">Doses Taken Today</p>
+                    <button class="btn-secondary" style="width: 100%;">Next: 08:00 PM</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content" style="padding: 25px;">
+                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <i data-lucide="footprints" style="color: var(--accent-3)"></i>
+                        Daily Activity
+                    </h3>
+                    <p style="font-size: 36px; font-weight: 900; margin-bottom: 10px;" class="text-gradient">4,356</p>
+                    <p style="color: var(--muted-2); margin-bottom: 15px;">Steps Taken</p>
+                    <button class="btn-secondary" style="width: 100%;">Goal: 5,000 steps</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="todo.html" class="nav-item">
+            <i data-lucide="list-checks"></i>
+            <span>To-Do</span>
+        </a>
+
+        <div class="sos-button" onmousedown="startSOSCountdown()"
+            onmouseup='this.innerHTML = "<i data-lucide=\"siren\"></i>"' ontouchstart="startSOSCountdown()"
+            ontouchend='this.innerHTML = "<i data-lucide=\"siren\"></i>"' <i data-lucide="siren"></i>
+        </div>
+
+        <a href="progress.html" class="nav-item">
+            <i data-lucide="trending-up"></i>
+            <span>Progress</span>
+        </a>
+        <a href="gamification.html" class="nav-item">
+            <i data-lucide="gamepad-2"></i>
+            <span>Game</span>
+        </a>
+    </nav>
+</body>
+
+</html>
