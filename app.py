@@ -189,7 +189,7 @@ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 @app.route("/")
 def home():
-    return "COMPASS Alert Server Running Successfully!"
+    return send_from_directory(".", "index.html")
 
 @app.route("/app")
 def send_app():
