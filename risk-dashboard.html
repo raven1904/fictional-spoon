@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - Risk Intelligence</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="script.js" defer></script>
+
+    <style>
+        /* =========================================== */
+        /* GLOBAL STYLES & THEME                       */
+        /* =========================================== */
+        :root {
+            /* Color Palette */
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --secondary: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+            
+            /* Theme Colors */
+            --bg: #F8FAFC;
+            --fg: #1E293B;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: #E2E8F0;
+            --muted: #64748B;
+            --muted-2: #94A3B8;
+            
+            /* Accents */
+            --accent-1: #7C3AED;
+            --accent-2: #8B5CF6;
+            --accent-3: #F59E0B;
+            
+            /* Spacing */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* =========================================== */
+        /* LAYOUT COMPONENTS                           */
+        /* =========================================== */
+        .header {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .greeting h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .greeting p {
+            opacity: 0.9;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-back-icon {
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--fg);
+            border: 1px solid var(--card-border);
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-1);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Badges */
+        .xp-badge {
+            background: linear-gradient(135deg, var(--secondary), #34D399);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--accent-1);
+        }
+
+        .nav-item i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .sos-button {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -20px;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+        }
+
+        /* =========================================== */
+        /* RISK ENGINE SPECIFIC STYLES                 */
+        /* =========================================== */
+        
+        /* Risk Widget */
+        #risk-widget {
+            position: relative;
+            z-index: 10;
+            margin-bottom: 20px;
+        }
+
+        .risk-widget-card {
+            border: 2px solid transparent;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-widget-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .risk-widget-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .risk-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 3s infinite;
+            z-index: 1;
+        }
+
+        /* Risk Weather */
+        .weather-card {
+            padding: 30px;
+            border-radius: var(--radius-xl);
+            text-align: center;
+            color: white;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid rgba(255,255,255,0.2);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        /* Risk Meter */
+        .risk-meter {
+            height: 24px;
+            background: linear-gradient(90deg, 
+                #10B981 0%, 
+                #10B981 20%, 
+                #F59E0B 20%, 
+                #F59E0B 60%, 
+                #EF4444 60%, 
+                #EF4444 80%, 
+                #7C3AED 80%, 
+                #7C3AED 100%
+            );
+            border-radius: 12px;
+            margin: 20px 0;
+            position: relative;
+            overflow: visible;
+        }
+
+        .risk-pointer {
+            position: absolute;
+            top: -8px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 3px solid var(--card-border);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            transition: left 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--fg);
+        }
+
+        /* Factor Cards */
+        .factor-card {
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--card-border);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .factor-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .factor-bar {
+            height: 8px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .factor-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Recommendations */
+        .recommendation-card {
+            padding: 20px;
+            border-left: 4px solid;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        /* Timeline */
+        .timeline-item {
+            padding: 15px;
+            border-left: 3px solid;
+            margin-bottom: 10px;
+            position: relative;
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 20px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: inherit;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px;
+        }
+
+        /* Forecast */
+        .forecast-day {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.9);
+            border-radius: var(--radius-lg);
+            border: 2px solid;
+            transition: all 0.3s ease;
+        }
+
+        .forecast-day:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Simulation */
+        .simulation-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .simulation-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .simulation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .simulation-btn {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+            color: var(--fg);
+        }
+
+        .simulation-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Forecast Grid */
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .forecast-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+
+        /* Badge */
+        .insight-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* =========================================== */
+        /* ANIMATIONS                                 */
+        /* =========================================== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* =========================================== */
+        /* UTILITY CLASSES                            */
+        /* =========================================== */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        /* =========================================== */
+        /* RESPONSIVE ADJUSTMENTS                     */
+        /* =========================================== */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            .greeting h1 {
+                font-size: 20px;
+            }
+            
+            .main-content {
+                padding: 0 15px;
+            }
+            
+            .card-content {
+                padding: 15px;
+            }
+            
+            .weather-card {
+                padding: 20px;
+            }
+            
+            .weather-card h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px;
+            }
+            
+            .greeting h1 {
+                font-size: 18px;
+            }
+            
+            .btn-primary, .btn-secondary {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .forecast-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="header-back-icon" onclick="goBack()">
+                <i data-lucide="arrow-left"></i>
+            </a>
+            
+            <div class="greeting">
+                <h1>Risk Intelligence Dashboard</h1>
+                <p><i data-lucide="activity"></i> Smart health risk prediction</p>
+            </div>
+            
+            <div class="header-controls">
+                <button class="btn-secondary" onclick="refreshDashboard()" id="refresh-btn">
+                    <i data-lucide="refresh-cw"></i> Refresh
+                </button>
+                <button class="btn-primary" onclick="exportReport()">
+                    <i data-lucide="download"></i> Export
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Risk Widget Container -->
+        <div id="risk-widget-container"></div>
+        
+        <!-- Current Risk Weather Display -->
+        <div class="card" style="margin-bottom: 25px; padding: 0; overflow: hidden;">
+            <div id="current-weather" class="weather-card">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Risk Meter & Factors -->
+        <div class="card" style="margin-bottom: 25px;">
+            <div class="card-content">
+                <h2 style="margin-bottom: 20px; color: var(--fg); display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="gauge"></i>
+                    Risk Analysis
+                </h2>
+                
+                <div class="risk-meter" id="risk-meter">
+                    <div class="risk-pointer" id="risk-pointer">
+                        <span id="pointer-value">0%</span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--muted-2); margin-top: 10px;">
+                    <span>Low (0-20%)</span>
+                    <span>Medium (21-60%)</span>
+                    <span>High (61-80%)</span>
+                    <span>Critical (81-100%)</span>
+                </div>
+                
+                <div id="risk-factors" style="margin-top: 30px;">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Insights & Forecast -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px;">
+            <!-- Insights -->
+            <div class="card">
+                <div class="card-content">
+                    <h2 style="margin-bottom: 20px; color: var(--fg); display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="lightbulb"></i>
+                        Key Insights
+                    </h2>
+                    <div id="risk-insights">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3-Day Forecast -->
+            <div class="card">
+                <div class="card-content">
+                    <h2 style="margin-bottom: 20px; color: var(--fg); display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="calendar"></i>
+                        3-Day Forecast
+                    </h2>
+                    <div class="forecast-grid" id="weather-forecast">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recommendations -->
+        <div class="card" style="margin-bottom: 25px;">
+            <div class="card-content">
+                <h2 style="margin-bottom: 20px; color: var(--fg); display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="thumbs-up"></i>
+                    Personalized Recommendations
+                </h2>
+                <div id="recommendations">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- What-If Simulator -->
+        <div class="card" style="margin-bottom: 25px;">
+            <div class="card-content">
+                <h2 style="margin-bottom: 20px; color: var(--fg); display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="play-circle"></i>
+                    What-If Simulator
+                </h2>
+                <p style="color: var(--muted-2); margin-bottom: 20px;">
+                    See how different actions affect your risk score
+                </p>
+                
+                <div class="simulation-grid">
+                    <div class="simulation-btn" onclick="runSimulation('take_medication')">
+                        <div style="font-size: 24px; margin-bottom: 8px;">💊</div>
+                        <div style="font-weight: bold;">Take Medication</div>
+                    </div>
+                    
+                    <div class="simulation-btn" onclick="runSimulation('check_vitals')">
+                        <div style="font-size: 24px; margin-bottom: 8px;">❤️</div>
+                        <div style="font-weight: bold;">Check Vitals</div>
+                    </div>
+                    
+                    <div class="simulation-btn" onclick="runSimulation('complete_tasks')">
+                        <div style="font-size: 24px; margin-bottom: 8px;">✅</div>
+                        <div style="font-weight: bold;">Complete Tasks</div>
+                    </div>
+                    
+                    <div class="simulation-btn" onclick="runSimulation('doctor_visit')">
+                        <div style="font-size: 24px; margin-bottom: 8px;">👨‍⚕️</div>
+                        <div style="font-weight: bold;">Doctor Visit</div>
+                    </div>
+                </div>
+                
+                <div id="simulation-result" style="margin-top: 20px;">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Risk Timeline -->
+        <div class="card" style="margin-bottom: 25px;">
+            <div class="card-content">
+                <h2 style="margin-bottom: 20px; color: var(--fg); display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="history"></i>
+                    7-Day Risk Timeline
+                </h2>
+                <div id="risk-timeline">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Export & Actions -->
+        <div class="card" style="margin-bottom: 40px; text-align: center;">
+            <div class="card-content">
+                <h2 style="margin-bottom: 20px; color: var(--fg); display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <i data-lucide="share-2"></i>
+                    Export & Share
+                </h2>
+                <p style="color: var(--muted-2); margin-bottom: 25px;">
+                    Download comprehensive risk reports to share with your healthcare team
+                </p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn-primary" onclick="exportReport('json')" style="display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="code"></i> JSON Report
+                    </button>
+                    <button class="btn-secondary" onclick="shareWithDoctor()" style="display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="message-circle"></i> Share with Doctor
+                    </button>
+                    <button class="btn-secondary" onclick="printReport()" style="display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="printer"></i> Print Summary
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item" onclick="navigate('home')">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="todo.html" class="nav-item" onclick="navigate('To-Do')">
+            <i data-lucide="list-checks"></i>
+            <span>To-Do</span>
+        </a>
+        <div class="sos-button" onclick="sendSOSAlert()">
+            <i data-lucide="siren"></i>
+        </div>
+        <a href="risk-dashboard.html" class="nav-item active" onclick="navigate('risk')">
+            <i data-lucide="activity"></i>
+            <span>Risk</span>
+        </a>
+        <a href="settings.html" class="nav-item" onclick="navigate('settings')">
+            <i data-lucide="settings"></i>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <script>
+        // ====================================================
+        // COMPASS ADVANCED RISK ENGINE v3.0
+        // Complete all-in-one implementation
+        // ====================================================
+
+        class CompassRiskEngine {
+            constructor() {
+                this.version = '3.0.0';
+                this.currentRisk = 50;
+                this.riskHistory = [];
+                this.weatherData = {};
+                this.riskFactors = {};
+                this.personalProfile = {};
+                this.insights = [];
+                this.lastUpdate = null;
+                this.isCalculating = false;
+                this.updateTimeout = null;
+                
+                this.init();
+            }
+            
+            init() {
+                console.log('🚀 Compass Risk Engine v' + this.version + ' Initializing...');
+                this.loadFromStorage();
+                this.loadPersonalProfile();
+                this.setupRealTimeListeners();
+                this.calculateRealTimeRisk();
+                
+                // Auto-update every 2 minutes
+                setInterval(() => {
+                    if (!this.isCalculating) {
+                        this.calculateRealTimeRisk();
+                    }
+                }, 120000);
+                
+                console.log('✅ Risk Engine Initialized with real-time tracking');
+            }
+            
+            // ==================== REAL-TIME LISTENERS ====================
+            
+            setupRealTimeListeners() {
+                // Listen for checkbox changes
+                document.addEventListener('change', (e) => {
+                    if (e.target.type === 'checkbox') {
+                        this.scheduleRiskUpdate();
+                    }
+                });
+                
+                // Monitor localStorage for changes
+                let lastState = localStorage.getItem('rpmCoachStateDistributed');
+                setInterval(() => {
+                    const currentState = localStorage.getItem('rpmCoachStateDistributed');
+                    if (currentState !== lastState) {
+                        console.log('🔄 App state changed, updating risk');
+                        lastState = currentState;
+                        this.scheduleRiskUpdate();
+                    }
+                }, 1000);
+            }
+            
+            scheduleRiskUpdate() {
+                if (this.updateTimeout) {
+                    clearTimeout(this.updateTimeout);
+                }
+                
+                this.updateTimeout = setTimeout(() => {
+                    this.calculateRealTimeRisk();
+                }, 500);
+            }
+            
+            // ==================== CORE RISK CALCULATION ====================
+            
+            calculateRealTimeRisk() {
+                if (this.isCalculating) {
+                    console.log('⏳ Risk calculation already in progress...');
+                    return this.currentRisk;
+                }
+                
+                this.isCalculating = true;
+                console.log('🔍 Calculating real-time risk...');
+                
+                try {
+                    // Get current app state
+                    const state = JSON.parse(localStorage.getItem('rpmCoachStateDistributed') || '{}');
+                    const tasks = state.tasks || [];
+                    const vitals = state.vitals || {};
+                    
+                    // Calculate all risk factors
+                    this.riskFactors = {
+                        medicationAdherence: this.calculateMedicationAdherence(tasks),
+                        vitalStability: this.calculateVitalStability(vitals),
+                        taskCompletion: this.calculateTaskCompletion(tasks),
+                        timePatterns: 50,
+                        lifestyleFactors: this.assessLifestyleFactors(),
+                        historicalTrend: this.analyzeHistoricalTrend(),
+                        environmentalFactors: this.assessEnvironmentalFactors(),
+                        socialSupport: this.assessSocialSupport()
+                    };
+                    
+                    // Weighted risk calculation
+                    const weights = {
+                        medicationAdherence: 0.25,
+                        vitalStability: 0.20,
+                        taskCompletion: 0.15,
+                        timePatterns: 0.10,
+                        lifestyleFactors: 0.10,
+                        historicalTrend: 0.10,
+                        environmentalFactors: 0.05,
+                        socialSupport: 0.05
+                    };
+                    
+                    let weightedRisk = 0;
+                    for (const [factor, value] of Object.entries(this.riskFactors)) {
+                        weightedRisk += value * weights[factor];
+                    }
+                    
+                    // Apply time of day modifier
+                    weightedRisk *= this.getTimeOfDayModifier();
+                    
+                    this.currentRisk = Math.min(100, Math.max(0, Math.round(weightedRisk)));
+                    
+                    // Generate insights
+                    this.generateInsights();
+                    
+                    // Update history
+                    this.updateRiskHistory();
+                    
+                    // Update weather
+                    this.updateRiskWeather();
+                    
+                    // Save everything
+                    this.saveToStorage();
+                    
+                    // Dispatch update event
+                    this.dispatchRiskUpdate();
+                    
+                    console.log('✅ Risk calculation complete:', this.currentRisk + '%');
+                    
+                    return this.currentRisk;
+                    
+                } catch (error) {
+                    console.error('❌ Error calculating risk:', error);
+                    return this.currentRisk;
+                } finally {
+                    this.isCalculating = false;
+                }
+            }
+            
+            // ==================== DATA PERSISTENCE ====================
+            
+            loadFromStorage() {
+                try {
+                    const saved = localStorage.getItem('compassRiskEngine');
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        this.currentRisk = data.currentRisk || 50;
+                        this.riskHistory = data.riskHistory || [];
+                        this.weatherData = data.weatherData || {};
+                        this.riskFactors = data.riskFactors || {};
+                        this.insights = data.insights || [];
+                        this.lastUpdate = data.lastUpdate || new Date().toISOString();
+                    }
+                } catch (e) {
+                    console.warn('Starting with fresh risk data');
+                }
+            }
+            
+            saveToStorage() {
+                const data = {
+                    currentRisk: this.currentRisk,
+                    riskHistory: this.riskHistory,
+                    weatherData: this.weatherData,
+                    riskFactors: this.riskFactors,
+                    insights: this.insights,
+                    lastUpdate: new Date().toISOString(),
+                    version: this.version
+                };
+                
+                try {
+                    localStorage.setItem('compassRiskEngine', JSON.stringify(data));
+                } catch (e) {
+                    console.error('Failed to save risk data:', e);
+                }
+            }
+            
+            loadPersonalProfile() {
+                try {
+                    const state = JSON.parse(localStorage.getItem('rpmCoachStateDistributed') || '{}');
+                    const profile = state.profile || {};
+                    
+                    this.personalProfile = {
+                        name: profile.name || 'User',
+                        age: profile.age || 65,
+                        conditions: profile.conditions || ['Hypertension', 'Diabetes'],
+                        medications: profile.medications || 3,
+                        lastDoctorVisit: profile.lastDoctorVisit || '2024-12-01',
+                        emergencyContacts: profile.emergencyContacts || 2,
+                        lifestyle: profile.lifestyle || 'moderate'
+                    };
+                } catch (e) {
+                    console.warn('Error loading profile:', e);
+                }
+            }
+            
+            // ==================== FACTOR CALCULATIONS ====================
+            
+            calculateMedicationAdherence(tasks) {
+                const medTasks = tasks.filter(t => 
+                    t.icon === 'Pill' || 
+                    t.title?.toLowerCase().includes('med') ||
+                    t.title?.toLowerCase().includes('pill')
+                );
+                
+                if (medTasks.length === 0) return 50;
+                
+                const taken = medTasks.filter(t => t.isChecked).length;
+                const adherenceRate = (taken / medTasks.length) * 100;
+                
+                // Check timing
+                const now = new Date();
+                const currentHour = now.getHours();
+                let timingScore = 50;
+                
+                medTasks.forEach(task => {
+                    if (task.timeMM && task.isChecked) {
+                        const scheduledHour = Math.floor(task.timeMM / 60);
+                        const hourDiff = Math.abs(currentHour - scheduledHour);
+                        if (hourDiff <= 1) timingScore += 15;
+                        else if (hourDiff <= 2) timingScore += 5;
+                        else timingScore -= 10;
+                    }
+                });
+                
+                timingScore = Math.min(100, Math.max(0, timingScore));
+                
+                // Combined score (70% adherence, 30% timing)
+                return (adherenceRate * 0.7) + (timingScore * 0.3);
+            }
+            
+            calculateVitalStability(vitals) {
+                let score = 50;
+                let readings = 0;
+                
+                // Blood Pressure
+                if (vitals.bp) {
+                    readings++;
+                    const [systolic, diastolic] = vitals.bp.split('/').map(Number);
+                    
+                    if (systolic > 180 || diastolic > 120) score -= 40;
+                    else if (systolic > 140 || diastolic > 90) score -= 20;
+                    else if (systolic >= 120 && systolic <= 130 && diastolic >= 80 && diastolic <= 85) score += 10;
+                    else if (systolic < 120 && diastolic < 80) score += 20;
+                }
+                
+                // Blood Glucose
+                if (vitals.bg) {
+                    readings++;
+                    if (vitals.bg > 200) score -= 30;
+                    else if (vitals.bg > 140) score -= 15;
+                    else if (vitals.bg >= 80 && vitals.bg <= 120) score += 15;
+                    else if (vitals.bg < 70) score -= 20;
+                }
+                
+                // Heart Rate
+                if (vitals.hr) {
+                    readings++;
+                    if (vitals.hr > 100 || vitals.hr < 50) score -= 20;
+                    else if (vitals.hr >= 60 && vitals.hr <= 90) score += 10;
+                }
+                
+                // Normalize by number of readings
+                if (readings > 0) {
+                    score = score / readings;
+                }
+                
+                return Math.min(100, Math.max(0, score));
+            }
+            
+            calculateTaskCompletion(tasks) {
+                if (tasks.length === 0) return 50;
+                
+                const completed = tasks.filter(t => t.isChecked).length;
+                const completionRate = (completed / tasks.length) * 100;
+                
+                // Check task importance
+                let importanceScore = 0;
+                tasks.forEach(task => {
+                    if (task.isChecked) {
+                        if (task.priority === 'high') importanceScore += 30;
+                        else if (task.priority === 'medium') importanceScore += 20;
+                        else importanceScore += 10;
+                    }
+                });
+                
+                importanceScore = Math.min(100, importanceScore);
+                
+                // Combined score (60% completion, 40% importance)
+                return (completionRate * 0.6) + (importanceScore * 0.4);
+            }
+            
+            assessLifestyleFactors() {
+                let score = 50;
+                
+                // Age factor
+                if (this.personalProfile.age >= 70) score += 20;
+                else if (this.personalProfile.age >= 60) score += 10;
+                else if (this.personalProfile.age < 40) score -= 10;
+                
+                // Conditions factor
+                const conditions = this.personalProfile.conditions || [];
+                if (conditions.includes('Diabetes')) score += 15;
+                if (conditions.includes('Hypertension')) score += 10;
+                if (conditions.includes('Heart Disease')) score += 20;
+                if (conditions.includes('COPD')) score += 15;
+                
+                // Medication count
+                const medCount = this.personalProfile.medications || 0;
+                if (medCount > 5) score += 15;
+                else if (medCount > 3) score += 10;
+                
+                // Lifestyle
+                const lifestyle = this.personalProfile.lifestyle || 'moderate';
+                if (lifestyle === 'sedentary') score += 15;
+                else if (lifestyle === 'active') score -= 10;
+                else if (lifestyle === 'very active') score -= 15;
+                
+                return Math.min(100, Math.max(0, score));
+            }
+            
+            analyzeHistoricalTrend() {
+                if (this.riskHistory.length < 3) return 50;
+                
+                const recent = this.riskHistory.slice(-3);
+                const older = this.riskHistory.length >= 6 ? 
+                    this.riskHistory.slice(-6, -3) : recent;
+                
+                const avgRecent = recent.reduce((sum, r) => sum + r.risk, 0) / recent.length;
+                const avgOlder = older.reduce((sum, r) => sum + r.risk, 0) / older.length;
+                
+                const trend = avgRecent - avgOlder;
+                
+                if (trend < -15) return 20;
+                else if (trend < -5) return 35;
+                else if (trend > 15) return 80;
+                else if (trend > 5) return 65;
+                else return 50;
+            }
+            
+            assessEnvironmentalFactors() {
+                const hour = new Date().getHours();
+                let score = 50;
+                
+                if (hour >= 22 || hour < 6) score += 10;
+                if (hour >= 12 && hour < 14) score -= 5;
+                
+                const month = new Date().getMonth();
+                if (month >= 11 || month <= 2) score += 5;
+                if (month >= 6 && month <= 8) score += 10;
+                
+                return Math.min(100, Math.max(0, score));
+            }
+            
+            assessSocialSupport() {
+                let score = 50;
+                const contacts = this.personalProfile.emergencyContacts || 0;
+                
+                if (contacts >= 3) score += 20;
+                else if (contacts >= 2) score += 10;
+                else if (contacts === 0) score -= 15;
+                
+                return Math.min(100, Math.max(0, score));
+            }
+            
+            getTimeOfDayModifier() {
+                const hour = new Date().getHours();
+                
+                if (hour >= 6 && hour < 10) return 1.1;
+                else if (hour >= 14 && hour < 16) return 0.9;
+                else if (hour >= 22 || hour < 6) return 1.2;
+                else return 1.0;
+            }
+            
+            // ==================== RISK WEATHER SYSTEM ====================
+            
+            updateRiskWeather() {
+                const weather = this.getRiskWeather(this.currentRisk);
+                this.weatherData = {
+                    ...weather,
+                    timestamp: new Date().toISOString(),
+                    forecast: this.generateWeatherForecast()
+                };
+            }
+            
+            getRiskWeather(riskScore) {
+                if (riskScore < 20) return {
+                    emoji: '☀️',
+                    label: 'Clear & Healthy',
+                    color: '#10B981',
+                    gradient: 'linear-gradient(135deg, #10B981, #34D399)',
+                    message: 'Excellent control! Keep maintaining your routine.'
+                };
+                else if (riskScore < 40) return {
+                    emoji: '⛅',
+                    label: 'Mild Concern',
+                    color: '#F59E0B',
+                    gradient: 'linear-gradient(135deg, #F59E0B, #FBBF24)',
+                    message: 'Minor issues detected. Stay vigilant with your tasks.'
+                };
+                else if (riskScore < 60) return {
+                    emoji: '❤️',
+                    label: 'Moderate Risk',
+                    color: '#FB923C',
+                    gradient: 'linear-gradient(135deg, #FB923C, #F97316)',
+                    message: 'Moderate risk level. Review recommendations carefully.'
+                };
+                else if (riskScore < 80) return {
+                    emoji: '❤️',
+                    label: 'High Risk',
+                    color: '#EF4444',
+                    gradient: 'linear-gradient(135deg, #EF4444, #DC2626)',
+                    message: 'High risk detected! Take immediate action.'
+                };
+                else return {
+                    emoji: '❤️',
+                    label: 'Critical Risk',
+                    color: '#7C3AED',
+                    gradient: 'linear-gradient(135deg, #7C3AED, #8B5CF6)',
+                    message: 'CRITICAL! Contact healthcare provider immediately.'
+                };
+            }
+            
+            generateWeatherForecast() {
+                const forecast = [];
+                const trend = this.analyzeTrendDirection();
+                
+                for (let i = 1; i <= 3; i++) {
+                    let predictedRisk = this.currentRisk;
+                    
+                    switch(trend) {
+                        case 'improving':
+                            predictedRisk = Math.max(0, this.currentRisk - (i * 5));
+                            break;
+                        case 'deteriorating':
+                            predictedRisk = Math.min(100, this.currentRisk + (i * 8));
+                            break;
+                        case 'stable':
+                            predictedRisk = this.currentRisk + (Math.random() * 10 - 5);
+                            break;
+                    }
+                    
+                    const date = new Date();
+                    date.setDate(date.getDate() + i);
+                    
+                    forecast.push({
+                        day: i,
+                        date: date.toISOString().split('T')[0],
+                        dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
+                        risk: Math.round(predictedRisk),
+                        weather: this.getRiskWeather(predictedRisk),
+                        confidence: Math.max(50, 100 - (i * 15))
+                    });
+                }
+                
+                return forecast;
+            }
+            
+            analyzeTrendDirection() {
+                if (this.riskHistory.length < 3) return 'stable';
+                
+                const recent = this.riskHistory.slice(-3);
+                const older = this.riskHistory.length >= 6 ? 
+                    this.riskHistory.slice(-6, -3) : this.riskHistory.slice(0, 3);
+                
+                const avgRecent = recent.reduce((s, r) => s + r.risk, 0) / recent.length;
+                const avgOlder = older.reduce((s, r) => s + r.risk, 0) / older.length;
+                
+                const diff = avgRecent - avgOlder;
+                
+                if (diff < -10) return 'improving';
+                if (diff > 10) return 'deteriorating';
+                return 'stable';
+            }
+            
+            // ==================== INSIGHTS & RECOMMENDATIONS ====================
+            
+            generateInsights() {
+                this.insights = [];
+                
+                // Medication insights
+                if (this.riskFactors.medicationAdherence < 70) {
+                    this.insights.push({
+                        type: 'warning',
+                        priority: this.riskFactors.medicationAdherence < 50 ? 'high' : 'medium',
+                        title: 'Medication Adherence Needs Improvement',
+                        message: `Your adherence score is ${Math.round(this.riskFactors.medicationAdherence)}%.`,
+                        action: 'Set up medication reminders',
+                        icon: 'pill'
+                    });
+                }
+                
+                // Vitals insights
+                if (this.riskFactors.vitalStability < 60) {
+                    this.insights.push({
+                        type: 'alert',
+                        priority: 'medium',
+                        title: 'Vital Signs Fluctuating',
+                        message: 'Your vital signs show some instability.',
+                        action: 'Check vitals twice today',
+                        icon: 'activity'
+                    });
+                }
+                
+                // High risk overall
+                if (this.currentRisk > 70) {
+                    this.insights.push({
+                        type: 'critical',
+                        priority: 'high',
+                        title: 'High Overall Risk Level',
+                        message: `Your current risk score is ${this.currentRisk}%.`,
+                        action: 'Contact healthcare provider',
+                        icon: 'alert-triangle'
+                    });
+                }
+                
+                // Positive insights for good scores
+                if (this.currentRisk < 30) {
+                    this.insights.push({
+                        type: 'positive',
+                        priority: 'low',
+                        title: 'Excellent Health Management!',
+                        message: 'You\'re doing great! Your risk level is very low.',
+                        action: 'Maintain current routine',
+                        icon: 'trophy'
+                    });
+                }
+                
+                // Limit to 5 insights
+                this.insights = this.insights.slice(0, 5);
+            }
+            
+            getRecommendations() {
+                const recommendations = [];
+                const factors = this.riskFactors;
+                
+                // High priority recommendations
+                if (factors.medicationAdherence < 60) {
+                    recommendations.push({
+                        priority: 'high',
+                        title: 'Improve Medication Adherence',
+                        actions: [
+                            'Set multiple daily reminders',
+                            'Use a pill organizer',
+                            'Ask family member for reminders'
+                        ],
+                        expectedImpact: '25-35% risk reduction',
+                        icon: 'bell',
+                        color: '#EF4444'
+                    });
+                }
+                
+                if (factors.vitalStability < 55) {
+                    recommendations.push({
+                        priority: 'high',
+                        title: 'Stabilize Vital Signs',
+                        actions: [
+                            'Check BP morning and evening',
+                            'Monitor glucose after meals',
+                            'Record all readings in app'
+                        ],
+                        expectedImpact: '20-30% risk reduction',
+                        icon: 'heart-pulse',
+                        color: '#EF4444'
+                    });
+                }
+                
+                // Medium priority recommendations
+                if (factors.taskCompletion < 70) {
+                    recommendations.push({
+                        priority: 'medium',
+                        title: 'Complete All Daily Tasks',
+                        actions: [
+                            'Prioritize high-importance tasks',
+                            'Break tasks into smaller steps',
+                            'Set realistic daily goals'
+                        ],
+                        expectedImpact: '15-25% risk reduction',
+                        icon: 'check-circle',
+                        color: '#F59E0B'
+                    });
+                }
+                
+                // Emergency recommendation for critical risk
+                if (this.currentRisk > 80) {
+                    recommendations.unshift({
+                        priority: 'critical',
+                        title: 'IMMEDIATE ACTION REQUIRED',
+                        actions: [
+                            'Contact your doctor immediately',
+                            'Have emergency contacts ready',
+                            'Review all medications with pharmacist'
+                        ],
+                        expectedImpact: 'Professional intervention needed',
+                        icon: 'siren',
+                        color: '#7C3AED'
+                    });
+                }
+                
+                return recommendations.slice(0, 4);
+            }
+            
+            // ==================== SIMULATION ENGINE ====================
+            
+            simulateAction(actionType) {
+                const simulationFactors = { ...this.riskFactors };
+                let impact = 0;
+                let message = '';
+                
+                switch(actionType) {
+                    case 'take_medication':
+                        simulationFactors.medicationAdherence = Math.min(100, simulationFactors.medicationAdherence + 30);
+                        impact = -15;
+                        message = 'Taking medication on time significantly reduces risk.';
+                        break;
+                        
+                    case 'check_vitals':
+                        simulationFactors.vitalStability = Math.min(100, simulationFactors.vitalStability + 25);
+                        impact = -12;
+                        message = 'Regular vital monitoring improves stability.';
+                        break;
+                        
+                    case 'complete_tasks':
+                        simulationFactors.taskCompletion = Math.min(100, simulationFactors.taskCompletion + 20);
+                        impact = -10;
+                        message = 'Task completion improves overall health management.';
+                        break;
+                        
+                    case 'doctor_visit':
+                        simulationFactors.medicationAdherence += 10;
+                        simulationFactors.vitalStability += 15;
+                        impact = -25;
+                        message = 'Doctor consultation provides comprehensive risk reduction.';
+                        break;
+                }
+                
+                // Calculate simulated risk
+                const weights = {
+                    medicationAdherence: 0.25,
+                    vitalStability: 0.20,
+                    taskCompletion: 0.15,
+                    timePatterns: 0.10,
+                    lifestyleFactors: 0.10,
+                    historicalTrend: 0.10,
+                    environmentalFactors: 0.05,
+                    socialSupport: 0.05
+                };
+                
+                let simulatedRisk = 0;
+                for (const [factor, value] of Object.entries(simulationFactors)) {
+                    simulatedRisk += value * weights[factor];
+                }
+                
+                simulatedRisk = Math.min(100, Math.max(0, Math.round(simulatedRisk)));
+                
+                return {
+                    action: actionType,
+                    currentRisk: this.currentRisk,
+                    simulatedRisk: simulatedRisk,
+                    impact: Math.round(impact),
+                    message: message,
+                    weather: this.getRiskWeather(simulatedRisk)
+                };
+            }
+            
+            // ==================== HISTORY & TRACKING ====================
+            
+            updateRiskHistory() {
+                const today = new Date().toISOString().split('T')[0];
+                const existingIndex = this.riskHistory.findIndex(entry => entry.date === today);
+                
+                const entry = {
+                    date: today,
+                    timestamp: new Date().toISOString(),
+                    risk: this.currentRisk,
+                    weather: this.weatherData,
+                    factors: { ...this.riskFactors },
+                    insights: [...this.insights]
+                };
+                
+                if (existingIndex >= 0) {
+                    this.riskHistory[existingIndex] = entry;
+                } else {
+                    this.riskHistory.push(entry);
+                    // Keep last 30 days
+                    if (this.riskHistory.length > 30) {
+                        this.riskHistory = this.riskHistory.slice(-30);
+                    }
+                }
+            }
+            
+            getRiskTimeline(days = 7) {
+                const timeline = this.riskHistory.slice(-days);
+                return timeline.map(entry => {
+                    const weather = this.getRiskWeather(entry.risk);
+                    let event = null;
+                    
+                    if (entry.risk > 80) event = { type: 'critical', text: 'High Risk Alert' };
+                    else if (entry.risk < 20) event = { type: 'positive', text: 'Excellent Control' };
+                    
+                    return {
+                        date: entry.date,
+                        risk: entry.risk,
+                        weather: weather,
+                        event: event
+                    };
+                });
+            }
+            
+            // ==================== REPORT GENERATION ====================
+            
+            generateReport() {
+                return {
+                    metadata: {
+                        generated: new Date().toISOString(),
+                        patient: this.personalProfile.name,
+                        period: 'Last 30 days',
+                        engineVersion: this.version
+                    },
+                    summary: {
+                        currentRisk: this.currentRisk,
+                        weather: this.weatherData,
+                        trend: this.analyzeTrendDirection(),
+                        lastUpdated: this.lastUpdate
+                    },
+                    factors: this.riskFactors,
+                    breakdown: this.getRiskBreakdown(),
+                    timeline: this.getRiskTimeline(7),
+                    forecast: this.weatherData.forecast || [],
+                    insights: this.insights,
+                    recommendations: this.getRecommendations()
+                };
+            }
+            
+            getRiskBreakdown() {
+                const factors = this.riskFactors;
+                const weights = {
+                    medicationAdherence: 25,
+                    vitalStability: 20,
+                    taskCompletion: 15,
+                    timePatterns: 10,
+                    lifestyleFactors: 10,
+                    historicalTrend: 10,
+                    environmentalFactors: 5,
+                    socialSupport: 5
+                };
+                
+                return Object.entries(factors).map(([key, value]) => {
+                    const weight = weights[key] || 5;
+                    const contribution = Math.round((value * weight) / 100);
+                    
+                    let icon = 'help-circle';
+                    let color = '#6B7280';
+                    
+                    switch(key) {
+                        case 'medicationAdherence':
+                            icon = 'pill'; color = '#EF4444'; break;
+                        case 'vitalStability':
+                            icon = 'heart-pulse'; color = '#F59E0B'; break;
+                        case 'taskCompletion':
+                            icon = 'check-circle'; color = '#10B981'; break;
+                        case 'timePatterns':
+                            icon = 'clock'; color = '#3B82F6'; break;
+                        case 'lifestyleFactors':
+                            icon = 'user'; color = '#8B5CF6'; break;
+                        case 'historicalTrend':
+                            icon = 'trending-up'; color = '#EC4899'; break;
+                        case 'environmentalFactors':
+                            icon = 'cloud'; color = '#06B6D4'; break;
+                        case 'socialSupport':
+                            icon = 'users'; color = '#F97316'; break;
+                    }
+                    
+                    return {
+                        name: this.formatFactorName(key),
+                        value: Math.round(value),
+                        weight: weight,
+                        contribution: contribution,
+                        icon: icon,
+                        color: color,
+                        status: value >= 70 ? 'good' : value >= 40 ? 'fair' : 'poor'
+                    };
+                });
+            }
+            
+            formatFactorName(key) {
+                const names = {
+                    medicationAdherence: 'Medication Adherence',
+                    vitalStability: 'Vital Stability',
+                    taskCompletion: 'Task Completion',
+                    timePatterns: 'Time Patterns',
+                    lifestyleFactors: 'Lifestyle Factors',
+                    historicalTrend: 'Historical Trend',
+                    environmentalFactors: 'Environmental',
+                    socialSupport: 'Social Support'
+                };
+                return names[key] || key;
+            }
+            
+            // ==================== EVENT SYSTEM ====================
+            
+            dispatchRiskUpdate() {
+                const event = new CustomEvent('riskUpdate', {
+                    detail: {
+                        risk: this.currentRisk,
+                        weather: this.weatherData,
+                        factors: this.riskFactors,
+                        timestamp: new Date().toISOString()
+                    }
+                });
+                window.dispatchEvent(event);
+            }
+            
+            // ==================== PUBLIC API ====================
+            
+            getCurrentRisk() {
+                return {
+                    score: this.currentRisk,
+                    weather: this.weatherData,
+                    level: this.getRiskWeather(this.currentRisk).label,
+                    color: this.getRiskWeather(this.currentRisk).color,
+                    lastUpdated: this.lastUpdate
+                };
+            }
+            
+            forceUpdate() {
+                console.log('🔄 Manual risk update requested');
+                return this.calculateRealTimeRisk();
+            }
+            
+            debug() {
+                const state = JSON.parse(localStorage.getItem('rpmCoachStateDistributed') || '{}');
+                const tasks = state.tasks || [];
+                
+                return {
+                    currentRisk: this.currentRisk,
+                    riskFactors: this.riskFactors,
+                    weatherData: this.weatherData,
+                    insights: this.insights,
+                    historyLength: this.riskHistory.length,
+                    lastUpdate: this.lastUpdate,
+                    appState: {
+                        totalTasks: tasks.length,
+                        completedTasks: tasks.filter(t => t.isChecked).length
+                    }
+                };
+            }
+        }
+
+        // ====================================================
+        // DASHBOARD RENDERING LOGIC
+        // ====================================================
+
+        let riskEngine;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+            
+            // Initialize risk engine
+            riskEngine = new CompassRiskEngine();
+            
+            // Render dashboard
+            initializeDashboard();
+            
+            // Listen for updates
+            window.addEventListener('riskUpdate', function() {
+                updateDashboard();
+            });
+            
+            // Auto-refresh every minute
+            setInterval(() => {
+                if (document.visibilityState === 'visible') {
+                    riskEngine.calculateRealTimeRisk();
+                }
+            }, 60000);
+        });
+
+        function initializeDashboard() {
+            renderCurrentWeather();
+            renderRiskMeter();
+            renderRiskFactors();
+            renderInsights();
+            renderForecast();
+            renderRecommendations();
+            renderTimeline();
+            renderRiskWidget();
+        }
+
+        function updateDashboard() {
+            renderCurrentWeather();
+            updateRiskMeter();
+            updateRiskFactors();
+            updateInsights();
+            updateForecast();
+            updateRecommendations();
+            updateTimeline();
+            updateRiskWidget();
+        }
+
+        function renderCurrentWeather() {
+            const container = document.getElementById('current-weather');
+            if (!container || !riskEngine) return;
+            
+            const risk = riskEngine.getCurrentRisk();
+            const weather = risk.weather;
+            
+            container.innerHTML = `
+                <div style="position: relative; z-index: 2;">
+                    <div style="font-size: 80px; margin-bottom: 10px; animation: float 3s ease-in-out infinite;">
+                        ${weather.emoji}
+                    </div>
+                    
+                    <h2 style="margin-bottom: 5px; font-size: 32px; font-weight: 900;">
+                        ${weather.label}
+                    </h2>
+                    
+                    <div style="font-size: 20px; margin-bottom: 15px; opacity: 0.9;">
+                        Risk Score: <strong>${risk.score}%</strong>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px; font-size: 16px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                        ${weather.message}
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <div style="
+                            padding: 12px 20px;
+                            background: rgba(255,255,255,0.2);
+                            border-radius: 12px;
+                            backdrop-filter: blur(10px);
+                            border: 1px solid rgba(255,255,255,0.3);
+                        ">
+                            <div style="font-size: 12px; opacity: 0.8;">Last Update</div>
+                            <div style="font-weight: bold;">Just now</div>
+                        </div>
+                        
+                        <div style="
+                            padding: 12px 20px;
+                            background: rgba(255,255,255,0.2);
+                            border-radius: 12px;
+                            backdrop-filter: blur(10px);
+                            border: 1px solid rgba(255,255,255,0.3);
+                        ">
+                            <div style="font-size: 12px; opacity: 0.8;">Trend</div>
+                            <div style="font-weight: bold;">${riskEngine.analyzeTrendDirection().toUpperCase()}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: ${weather.gradient}; z-index: 1;"></div>
+            `;
+            
+            container.style.background = weather.gradient;
+        }
+
+        function renderRiskMeter() {
+            const pointer = document.getElementById('risk-pointer');
+            const value = document.getElementById('pointer-value');
+            
+            if (!pointer || !value || !riskEngine) return;
+            
+            const risk = riskEngine.currentRisk;
+            const position = Math.min(96, Math.max(4, risk));
+            
+            pointer.style.left = `${position}%`;
+            value.textContent = `${risk}%`;
+            
+            // Update pointer color based on risk
+            if (risk < 20) pointer.style.borderColor = '#10B981';
+            else if (risk < 60) pointer.style.borderColor = '#F59E0B';
+            else if (risk < 80) pointer.style.borderColor = '#EF4444';
+            else pointer.style.borderColor = '#7C3AED';
+        }
+
+        function updateRiskMeter() {
+            renderRiskMeter();
+        }
+
+        function renderRiskFactors() {
+            const container = document.getElementById('risk-factors');
+            if (!container || !riskEngine) return;
+            
+            const breakdown = riskEngine.getRiskBreakdown();
+            
+            container.innerHTML = breakdown.map(factor => `
+                <div class="factor-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="
+                                width: 40px;
+                                height: 40px;
+                                background: ${factor.color}20;
+                                border-radius: 12px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                border: 2px solid ${factor.color}40;
+                            ">
+                                <i data-lucide="${factor.icon}" style="color: ${factor.color}; width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; color: var(--fg);">${factor.name}</div>
+                                <div style="font-size: 12px; color: var(--muted-2);">
+                                    Weight: ${factor.weight}% • Contribution: ${factor.contribution}%
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 24px; font-weight: bold; color: ${factor.color};">
+                                ${factor.value}%
+                            </div>
+                            <div style="font-size: 12px; color: var(--muted-2);">
+                                ${factor.status.toUpperCase()}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="factor-bar">
+                        <div class="factor-fill" style="
+                            width: ${factor.value}%;
+                            background: linear-gradient(90deg, 
+                                color-mix(in oklab, ${factor.color} 70%, transparent),
+                                color-mix(in oklab, ${factor.color} 100%, transparent)
+                            );
+                        "></div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Initialize icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        function updateRiskFactors() {
+            renderRiskFactors();
+        }
+
+        function renderInsights() {
+            const container = document.getElementById('risk-insights');
+            if (!container || !riskEngine) return;
+            
+            const insights = riskEngine.insights || [];
+            
+            if (insights.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: var(--muted-2);">
+                        <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 15px; color: #10B981;"></i>
+                        <div style="font-size: 16px; font-weight: 500;">No significant insights at this time</div>
+                        <div style="font-size: 14px; margin-top: 5px;">Your health management is on track!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = insights.map(insight => {
+                let iconColor = '#6B7280';
+                let bgColor = 'rgba(107, 114, 128, 0.1)';
+                
+                switch(insight.type) {
+                    case 'critical':
+                        iconColor = '#7C3AED';
+                        bgColor = 'rgba(124, 58, 237, 0.1)';
+                        break;
+                    case 'warning':
+                    case 'alert':
+                        iconColor = '#EF4444';
+                        bgColor = 'rgba(239, 68, 68, 0.1)';
+                        break;
+                    case 'positive':
+                        iconColor = '#10B981';
+                        bgColor = 'rgba(16, 185, 129, 0.1)';
+                        break;
+                    case 'info':
+                        iconColor = '#3B82F6';
+                        bgColor = 'rgba(59, 130, 246, 0.1)';
+                        break;
+                }
+                
+                return `
+                    <div style="
+                        padding: 15px;
+                        background: ${bgColor};
+                        border-radius: 12px;
+                        margin-bottom: 10px;
+                        border-left: 4px solid ${iconColor};
+                    ">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="
+                                width: 36px;
+                                height: 36px;
+                                background: ${iconColor}20;
+                                border-radius: 10px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-shrink: 0;
+                            ">
+                                <i data-lucide="${insight.icon}" style="color: ${iconColor}; width: 18px; height: 18px;"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                    <div style="font-weight: bold; color: var(--fg);">${insight.title}</div>
+                                    <span class="insight-badge" style="background: ${iconColor}20; color: ${iconColor};">
+                                        ${insight.priority.toUpperCase()}
+                                    </span>
+                                </div>
+                                <div style="color: var(--muted-2); font-size: 14px; margin-bottom: 8px;">
+                                    ${insight.message}
+                                </div>
+                                <div style="font-size: 13px; color: ${iconColor}; font-weight: 500;">
+                                    <i data-lucide="zap" style="width: 12px; height: 12px; margin-right: 5px;"></i>
+                                    ${insight.action}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Initialize icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        function updateInsights() {
+            renderInsights();
+        }
+
+        function renderForecast() {
+            const container = document.getElementById('weather-forecast');
+            if (!container || !riskEngine) return;
+            
+            const forecast = riskEngine.weatherData.forecast || [];
+            
+            if (forecast.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--muted-2);">
+                        <i data-lucide="cloud-off" style="width: 40px; height: 40px; margin-bottom: 10px;"></i>
+                        <div>Forecast data loading...</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = forecast.map(day => {
+                const weather = day.weather;
+                return `
+                    <div class="forecast-day" style="border-color: ${weather.color}40;">
+                        <div style="font-weight: bold; color: var(--fg); margin-bottom: 5px;">${day.dayName}</div>
+                        <div style="font-size: 32px; margin: 10px 0;">${weather.emoji}</div>
+                        <div style="font-size: 20px; font-weight: bold; color: ${weather.color}; margin-bottom: 5px;">
+                            ${day.risk}%
+                        </div>
+                        <div style="font-size: 12px; color: var(--muted-2); margin-bottom: 5px;">
+                            ${weather.label}
+                        </div>
+                        <div style="font-size: 10px; color: var(--muted-2);">
+                            ${day.confidence}% confidence
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateForecast() {
+            renderForecast();
+        }
+
+        function renderRecommendations() {
+            const container = document.getElementById('recommendations');
+            if (!container || !riskEngine) return;
+            
+            const recommendations = riskEngine.getRecommendations();
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: var(--muted-2);">
+                        <i data-lucide="thumbs-up" style="width: 48px; height: 48px; margin-bottom: 15px; color: #10B981;"></i>
+                        <div style="font-size: 16px; font-weight: 500;">No recommendations needed</div>
+                        <div style="font-size: 14px; margin-top: 5px;">Your current routine is effective!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = recommendations.map(rec => {
+                let icon = 'bell';
+                let priorityText = '';
+                
+                switch(rec.priority) {
+                    case 'critical':
+                        icon = 'siren';
+                        priorityText = 'IMMEDIATE ACTION';
+                        break;
+                    case 'high':
+                        icon = 'alert-triangle';
+                        priorityText = 'HIGH PRIORITY';
+                        break;
+                    case 'medium':
+                        icon = 'alert-circle';
+                        priorityText = 'MEDIUM PRIORITY';
+                        break;
+                    case 'low':
+                        icon = 'info';
+                        priorityText = 'SUGGESTION';
+                        break;
+                }
+                
+                return `
+                    <div class="recommendation-card" style="border-left-color: ${rec.color};">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                            <div style="
+                                width: 40px;
+                                height: 40px;
+                                background: ${rec.color}20;
+                                border-radius: 12px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <i data-lucide="${icon}" style="color: ${rec.color}; width: 20px; height: 20px;"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-weight: bold; color: var(--fg); font-size: 16px;">${rec.title}</div>
+                                    <span style="
+                                        padding: 4px 12px;
+                                        background: ${rec.color}20;
+                                        color: ${rec.color};
+                                        border-radius: 20px;
+                                        font-size: 11px;
+                                        font-weight: bold;
+                                    ">
+                                        ${priorityText}
+                                    </span>
+                                </div>
+                                <div style="font-size: 13px; color: ${rec.color}; margin-top: 5px;">
+                                    <i data-lucide="target" style="width: 12px; height: 12px; margin-right: 5px;"></i>
+                                    Expected impact: ${rec.expectedImpact}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-left: 52px;">
+                            <div style="font-size: 14px; color: var(--muted-2); margin-bottom: 10px;">Recommended actions:</div>
+                            <ul style="margin: 0; padding-left: 20px; color: var(--fg);">
+                                ${rec.actions.map(action => `<li style="margin-bottom: 5px;">${action}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Initialize icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        function updateRecommendations() {
+            renderRecommendations();
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('risk-timeline');
+            if (!container || !riskEngine) return;
+            
+            const timeline = riskEngine.getRiskTimeline(7);
+            
+            if (timeline.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: var(--muted-2);">
+                        <i data-lucide="calendar" style="width: 48px; height: 48px; margin-bottom: 15px;"></i>
+                        <div style="font-size: 16px; font-weight: 500;">No timeline data yet</div>
+                        <div style="font-size: 14px; margin-top: 5px;">Complete tasks to build your risk history</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Reverse to show latest first
+            const reversed = [...timeline].reverse();
+            
+            container.innerHTML = reversed.map(entry => {
+                let eventBadge = '';
+                if (entry.event) {
+                    let bgColor = 'rgba(107, 114, 128, 0.1)';
+                    let textColor = '#6B7280';
+                    
+                    if (entry.event.type === 'critical') {
+                        bgColor = 'rgba(124, 58, 237, 0.1)';
+                        textColor = '#7C3AED';
+                    } else if (entry.event.type === 'warning') {
+                        bgColor = 'rgba(239, 68, 68, 0.1)';
+                        textColor = '#EF4444';
+                    } else if (entry.event.type === 'positive') {
+                        bgColor = 'rgba(16, 185, 129, 0.1)';
+                        textColor = '#10B981';
+                    }
+                    
+                    eventBadge = `
+                        <div style="
+                            display: inline-block;
+                            padding: 4px 10px;
+                            background: ${bgColor};
+                            color: ${textColor};
+                            border-radius: 12px;
+                            font-size: 11px;
+                            font-weight: bold;
+                            margin-top: 8px;
+                        ">
+                            ${entry.event.text}
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="timeline-item" style="border-left-color: ${entry.weather.color};">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="font-size: 24px;">${entry.weather.emoji}</div>
+                                <div>
+                                    <div style="font-weight: bold; color: var(--fg);">${entry.date}</div>
+                                    <div style="font-size: 14px; color: var(--muted-2);">${entry.weather.label}</div>
+                                </div>
+                            </div>
+                            <div style="
+                                font-size: 28px;
+                                font-weight: bold;
+                                color: ${entry.weather.color};
+                            ">
+                                ${entry.risk}%
+                            </div>
+                        </div>
+                        ${eventBadge}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateTimeline() {
+            renderTimeline();
+        }
+
+        function renderRiskWidget() {
+            const container = document.getElementById('risk-widget-container');
+            if (!container || !riskEngine) return;
+            
+            const risk = riskEngine.getCurrentRisk();
+            const weather = risk.weather;
+            
+            container.innerHTML = `
+                <div class="card risk-widget-card" onclick="window.location.href='#'" 
+                     style="border: 2px solid ${weather.color}40; position: relative; overflow: hidden;">
+                    
+                    <div class="risk-widget-bg" style="background: ${weather.gradient};"></div>
+                    
+                    <div class="risk-shimmer"></div>
+                    
+                    <div class="card-content" style="position: relative; z-index: 2;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="display: flex; align-items: center; gap: 10px; margin: 0; color: var(--fg);">
+                                <i data-lucide="activity" style="color: ${weather.color}"></i>
+                                Live Risk Monitor
+                            </h3>
+                            <span class="xp-badge" style="background: ${weather.gradient}; color: white; font-weight: bold;">
+                                ${risk.score}%
+                            </span>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 15px 0;">
+                            <div style="font-size: 56px; margin-bottom: 10px; animation: float 3s ease-in-out infinite;">
+                                ${weather.emoji}
+                            </div>
+                            
+                            <h4 style="margin-bottom: 5px; color: ${weather.color}; font-weight: bold;">
+                                ${weather.label}
+                            </h4>
+                            
+                            <p style="color: var(--muted-2); font-size: 14px; margin-bottom: 15px;">
+                                ${weather.message}
+                            </p>
+                            
+                            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                                <div style="padding: 8px 12px; background: rgba(255,255,255,0.9); border-radius: 12px; border: 1px solid var(--card-border);">
+                                    <div style="font-size: 12px; color: var(--muted-2);">Status</div>
+                                    <div style="font-weight: bold; color: var(--fg);">Active</div>
+                                </div>
+                                <div style="padding: 8px 12px; background: rgba(255,255,255,0.9); border-radius: 12px; border: 1px solid var(--card-border);">
+                                    <div style="font-size: 12px; color: var(--muted-2);">Updated</div>
+                                    <div style="font-weight: bold; color: var(--fg);">Just now</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateRiskWidget() {
+            renderRiskWidget();
+        }
+
+        // ====================================================
+        // SIMULATION FUNCTIONS
+        // ====================================================
+
+        function runSimulation(action) {
+            if (!riskEngine) return;
+            
+            const result = riskEngine.simulateAction(action);
+            
+            const container = document.getElementById('simulation-result');
+            if (!container) return;
+            
+            const weather = result.weather;
+            const impact = result.impact;
+            const isPositive = impact < 0;
+            
+            container.innerHTML = `
+                <div style="
+                    padding: 20px;
+                    background: ${isPositive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
+                    border-radius: 16px;
+                    border: 2px solid ${isPositive ? '#10B981' : '#EF4444'};
+                    animation: slideUp 0.5s ease-out;
+                ">
+                    <div style="text-align: center;">
+                        <div style="font-size: 40px; margin-bottom: 10px;">${weather.emoji}</div>
+                        <div style="font-weight: bold; font-size: 18px; color: var(--fg); margin-bottom: 10px;">
+                            ${result.message}
+                        </div>
+                        <div style="color: var(--muted-2); margin-bottom: 20px;">
+                            Simulated impact of this action
+                        </div>
+                        
+                        <div style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 30px;
+                            margin-bottom: 20px;
+                        ">
+                            <div style="text-align: center;">
+                                <div style="font-size: 12px; color: var(--muted-2); margin-bottom: 5px;">Current Risk</div>
+                                <div style="font-size: 32px; font-weight: bold; color: var(--fg);">${result.currentRisk}%</div>
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <div style="font-size: 20px; color: ${isPositive ? '#10B981' : '#EF4444'};">
+                                    <i data-lucide="${isPositive ? 'arrow-down' : 'arrow-up'}"></i>
+                                </div>
+                                <div style="
+                                    padding: 4px 12px;
+                                    background: ${isPositive ? '#10B981' : '#EF4444'};
+                                    color: white;
+                                    border-radius: 20px;
+                                    font-size: 12px;
+                                    font-weight: bold;
+                                    margin-top: 5px;
+                                ">
+                                    ${isPositive ? '-' : '+'}${Math.abs(impact)}%
+                                </div>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <div style="font-size: 12px; color: var(--muted-2); margin-bottom: 5px;">Simulated Risk</div>
+                                <div style="
+                                    font-size: 32px;
+                                    font-weight: bold;
+                                    color: ${isPositive ? '#10B981' : '#EF4444'};
+                                ">
+                                    ${result.simulatedRisk}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Initialize icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        // ====================================================
+        // UTILITY FUNCTIONS
+        // ====================================================
+
+        function refreshDashboard() {
+            if (!riskEngine) return;
+            
+            const btn = document.getElementById('refresh-btn');
+            if (btn) {
+                btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Refreshing...';
+                btn.disabled = true;
+            }
+            
+            riskEngine.forceUpdate();
+            
+            setTimeout(() => {
+                if (btn) {
+                    btn.innerHTML = '<i data-lucide="refresh-cw"></i> Refresh';
+                    btn.disabled = false;
+                }
+            }, 1000);
+        }
+
+        function exportReport(format = 'json') {
+            if (!riskEngine) return;
+            
+            const report = riskEngine.generateReport();
+            
+            if (format === 'json') {
+                const dataStr = JSON.stringify(report, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+                const exportFileDefaultName = `COMPASS_Risk_Report_${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showToast('✅ Risk report downloaded as JSON!', 'success');
+            }
+        }
+
+        function shareWithDoctor() {
+            if (!riskEngine) return;
+            
+            const report = riskEngine.generateReport();
+            const message = `🏥 COMPASS Health Risk Report
+
+Patient: ${report.metadata.patient}
+Date: ${report.metadata.generated.split('T')[0]}
+
+Current Risk: ${report.summary.currentRisk}%
+Risk Level: ${report.summary.weather.label}
+Trend: ${report.summary.trend}
+
+Key Recommendations:
+${report.recommendations.slice(0, 3).map(r => `• ${r.title}`).join('\n')}
+
+---
+Shared via COMPASS Health App`;
+
+            // Create WhatsApp link
+            const whatsappLink = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappLink, '_blank');
+            
+            showToast('📱 Opening WhatsApp to share report...', 'info');
+        }
+
+        function printReport() {
+            const printContent = document.querySelector('.main-content').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>COMPASS Risk Report</title>
+                    <style>
+                        body { font-family: sans-serif; padding: 20px; }
+                        .card { border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+                        h1, h2, h3 { color: #333; }
+                        @media print {
+                            button { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>COMPASS Health Risk Report</h1>
+                    <p>Generated: ${new Date().toLocaleString()}</p>
+                    <hr>
+                    ${printContent}
+                </body>
+                </html>
+            `;
+            
+            window.print();
+            document.body.innerHTML = originalContent;
+            initializeDashboard();
+        }
+
+        function showToast(message, type = 'info') {
+            const existing = document.querySelector('.risk-toast');
+            if (existing) existing.remove();
+            
+            const toast = document.createElement('div');
+            toast.className = 'risk-toast';
+            toast.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6'};
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 12px;
+                    box-shadow: var(--shadow-lg);
+                    z-index: 10000;
+                    animation: slideUp 0.3s ease-out;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    max-width: 300px;
+                ">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideUp 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ====================================================
+        // NAVIGATION FUNCTIONS
+        // ====================================================
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function navigate(page) {
+            showToast(`Navigating to ${page}...`, 'info');
+        }
+
+        function triggerSOS() {
+            showToast('🚨 SOS Alert Activated!', 'error');
+        }
+
+        // ====================================================
+        // DEBUG FUNCTIONS
+        // ====================================================
+
+        window.debugRiskEngine = function() {
+            if (riskEngine) {
+                console.log('🔍 Risk Engine Debug:', riskEngine.debug());
+            }
+        };
+
+        window.forceRiskUpdate = function() {
+            if (riskEngine) {
+                riskEngine.forceUpdate();
+            }
+        };
+
+        // Initialize icons on load
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

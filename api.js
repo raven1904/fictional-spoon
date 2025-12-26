@@ -3,7 +3,7 @@
 // API Communication Module
 // ====================
 
-const API_BASE_URL = window.location.origin;
+const API_BASE_URL = 'http://localhost:5002';
 
 // Initialize app state
 let appState = null;
@@ -52,8 +52,7 @@ function initializeAppState() {
 // Generic API request handler
 async function sendAPIRequest(endpoint, method = 'POST', data = {}) {
   try {
-    const url = `${API_BASE_URL}/${endpoint}`;
-    
+  const url = API_BASE_URL + endpoint;
     console.log(`📡 API Request: ${method} ${url}`, data);
     
     const requestOptions = {
@@ -640,7 +639,7 @@ function logEvent(eventName, data) {
 
 async function checkAPIStatus() {
   try {
-    const result = await sendAPIRequest('status', 'GET');
+    const result = await sendAPIRequest('/status', 'GET');
     
     if (result.twilio?.enabled) {
       console.log('✅ API Server with Twilio is online:', result);

@@ -9,6 +9,7 @@
     
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+    <script src="api.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 
@@ -49,7 +50,7 @@
             </div>
             <div class="vital-item">
                 <i data-lucide="thermometer" style="color: var(--warn)"></i>
-                <span style="font-weight: bold;">130/80</span> mmHg
+                <span style="font-weight: bold;">70/80</span> mmHg
             </div>
             <div class="vital-item">
                 <i data-lucide="droplet" style="color: var(--accent-1)"></i>
@@ -114,6 +115,10 @@
                     <i data-lucide="info" style="margin-right: 8px;"></i>
                     Your safety shield protects your streak from one missed dose. Earn more by maintaining streaks!
                 </div>
+<button id="nudge-generate-btn" class="btn-primary" style="width: 100%; margin-top: 20px;" onclick="window.location.href='risk-dashboard.html'">
+                    <span id="nudge-btn-text">Risk Dashboard</span>
+                    <div id="nudge-loading" class="spinner hidden"></div>
+                </button>
             </div>
         </div>
 

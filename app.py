@@ -9,13 +9,13 @@ CORS(app)
 
 # Twilio credentials
 ACCOUNT_SID = "AC07962c2a7f0475dd65578f09deab36b4"
-AUTH_TOKEN = "d52d557a5f93c9cdf2daefa76b2fb29d"
+AUTH_TOKEN = "30719d3cd3f311ac6b99ed58115f2aeb"
 WHATSAPP_FROM = "whatsapp:+14155238886"
 
 # Contact numbers
-FAMILY_NUMBERS = ["+919325298788"]
-DOCTOR_NUMBERS = ["+919325298788"]
-EMERGENCY_NUMBERS = ["+919325298788"]
+FAMILY_NUMBERS = ["+919403575944"]
+DOCTOR_NUMBERS = ["+919403575944"]
+EMERGENCY_NUMBERS = ["+919403575944"]
 
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
@@ -35,7 +35,73 @@ def send_whatsapp_message(numbers, message):
             except Exception as e:
                 print(f"❌ Failed to send to {num}: {e}")
     return sent_to
-
+# Add this route - around line 20-30 in your app.py
+@app.route('/status', methods=['GET'])
+def api_status():
+    """API status endpoint - REQUIRED by JavaScript"""
+    return jsonify({
+        "status": "online",
+        "server": "COMPASS Flask API",
+        "version": "2.0.0",
+        "twilio": {
+            "enabled": True,
+            "status": "configured",
+            "services": ["SMS", "WhatsApp", "Voice"],
+            "whatsapp_from": WHATSAPP_FROM
+        },
+        "stats": {
+            "family_contacts": len(FAMILY_NUMBERS),
+            "doctor_contacts": len(DOCTOR_NUMBERS),
+            "emergency_contacts": len(EMERGENCY_NUMBERS)
+        },
+        "timestamp": datetime.now().isoformat(),
+        "message": "API server is running and ready"
+    })
+@app.route('/twilio/test', methods=['POST'])
+def test_twilio():
+    """Test Twilio connection"""
+    data = request.json
+    test_number = data.get('test_number')
+    
+    print(f"🧪 Testing Twilio with number: {test_number}")
+    
+    # Try to send a test message
+    try:
+        if test_number:
+            # Test WhatsApp message
+            test_message = f"""
+🧪 *TWILIO TEST MESSAGE*
+This is a test message from COMPASS API Server.
+Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+Status: ✅ Twilio is properly configured!
+"""
+            message_obj = client.messages.create(
+                body=test_message,
+                from_=WHATSAPP_FROM,
+                to=f"whatsapp:{test_number}"
+            )
+            
+            return jsonify({
+                "success": True,
+                "message": "Test message sent successfully",
+                "data": {
+                    "sid": message_obj.sid,
+                    "test_number": test_number,
+                    "status": message_obj.status,
+                    "timestamp": datetime.now().isoformat()
+                }
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "error": "No test number provided"
+            }), 400
+            
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
 # ==================== ADD THESE MISSING ROUTES ====================
 
 # 1. HTML PAGE ROUTES (You're missing these!)

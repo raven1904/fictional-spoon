@@ -167,25 +167,19 @@ function startSOSCountdown() {
 
   const countdownInterval = setInterval(() => {
     countdown--;
-    if (countdown <= 0) {
+      if (countdown <= 0) {
       clearInterval(countdownInterval);
-      sendSOSAlert();
+      // Prefer API implementation if available (api.js). Fallback to local handler.
+      if (window.API && typeof window.API.sendSOSAlert === 'function') {
+        window.API.sendSOSAlert();
+      } else {
+        sendSOSAlert();
+      }
       sosButton.innerHTML = '<i data-lucide="siren"></i>';
     } else {
       sosButton.innerHTML = `<span style="font-size: 24px; font-weight: bold;">${countdown}</span>`;
     }
   }, 1000);
-}
-
-function sendSOSAlert() {
-  alert('SOS Alert Sent!');
-  triggerConfetti();
-
-  // Reset button
-  const sosButton = document.querySelector('.sos-button');
-  if (sosButton) {
-    sosButton.innerHTML = '<i data-lucide="siren"></i>';
-  }
 }
 
 // ====================
@@ -591,3 +585,37 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+// ====================
+// MISSING FUNCTIONS FOR API.JS
+// ====================
+
+function logEvent(eventName, data) {
+  console.log(`📝 Event logged: ${eventName}`, data);
+  
+  try {
+    const events = JSON.parse(localStorage.getItem('appEvents') || '[]');
+    events.push({
+      event: eventName,
+      timestamp: new Date().toISOString(),
+      ...data
+    });
+    
+    localStorage.setItem('appEvents', JSON.stringify(events));
+  } catch (error) {
+    console.error("Event logging error:", error);
+  }
+}
+
+function getCompletedTasksCount() {
+  const tasks = JSON.parse(localStorage.getItem('healthTasks') || '[]');
+  return tasks.filter(t => t.completed).length;
+}
+
+function getUserId() {
+  let userId = localStorage.getItem('userId');
+  if (!userId) {
+    userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem('userId', userId);
+  }
+  return userId;
+}
