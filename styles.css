@@ -291,6 +291,7 @@ body {
   font-weight: 900;
   background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
   background-size: 200% 200%;
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shimmer 3s infinite;
@@ -413,6 +414,7 @@ body {
   text-align: center;
   background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
   background-size: 200% 200%;
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-x 3s ease infinite;
@@ -614,6 +616,7 @@ body {
 .text-gradient {
   background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
   background-size: 200% 200%;
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-x 3s ease infinite;
@@ -656,61 +659,35 @@ body {
   z-index: -1;
   opacity: 0.5;
   filter: blur(8px);
+}
 
-  /* ====================
-     HEADER SETTINGS ICON
-     ==================== */
-  .header-settings-icon {
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid var(--card-border);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-left: auto;
-    margin-right: 15px;
-  }
+/* ====================
+   HEADER SETTINGS ICON
+   ==================== */
+.header-settings-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid var(--card-border);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: auto;
+  margin-right: 15px;
+}
 
-  .header-settings-icon:hover {
-    background: white;
-    transform: rotate(15deg) scale(1.1);
-    border-color: var(--accent-1);
-    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
-  }
+.header-settings-icon:hover {
+  background: white;
+  transform: rotate(15deg) scale(1.1);
+  border-color: var(--accent-1);
+  box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+}
 
-  .header-settings-icon i {
-    width: 24px;
-    height: 24px;
-    color: var(--accent-1);
-  }
-
-  /* Update header-content for better spacing */
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  /* Adjust user-info to work with settings icon */
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex: 1;
-    min-width: 200px;
-  }
-
-  /* Update header-controls */
-  .header-controls {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-  }
+.header-settings-icon i {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-1);
 }

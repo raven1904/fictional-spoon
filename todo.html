@@ -148,13 +148,15 @@
                         </svg>
                         <div
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                            <div id="progress-percent" style="font-size: 28px; font-weight: 900;" class="text-gradient">50%</div>
+                            <div id="progress-percent" style="font-size: 28px; font-weight: 900;" class="text-gradient">
+                                50%</div>
                             <div style="font-size: 12px; color: var(--muted-2);">Complete</div>
                         </div>
                     </div>
 
                     <div>
-                        <div id="tasks-count" style="font-size: 48px; font-weight: 900; line-height: 1;" class="text-gradient">3/6</div>
+                        <div id="tasks-count" style="font-size: 48px; font-weight: 900; line-height: 1;"
+                            class="text-gradient">3/6</div>
                         <div style="color: var(--muted-2);">Tasks Completed</div>
                     </div>
                 </div>
@@ -387,18 +389,18 @@
 
         <div class="sos-button" onmousedown="startSOSCountdown()"
             onmouseup='this.innerHTML = "<i data-lucide=\"siren\"></i>"' ontouchstart="startSOSCountdown()"
-            ontouchend='this.innerHTML = "<i data-lucide=\" siren\"></i>"''>
+            ontouchend='this.innerHTML = "<i data-lucide=\"siren\"></i>"'>
             <i data-lucide="siren"></i>
         </div>
 
-            <a href="progress.html" class="nav-item">
-                <i data-lucide="trending-up"></i>
-                <span>Progress</span>
-            </a>
-            <a href="gamification.html" class="nav-item">
-                <i data-lucide="gamepad-2"></i>
-                <span>Game</span>
-            </a>
+        <a href="progress.html" class="nav-item">
+            <i data-lucide="trending-up"></i>
+            <span>Progress</span>
+        </a>
+        <a href="gamification.html" class="nav-item">
+            <i data-lucide="gamepad-2"></i>
+            <span>Game</span>
+        </a>
     </nav>
 
     <script>
@@ -407,32 +409,45 @@
         const totalTasks = 6;
 
         function toggleTask(taskElement) {
-            const checkmark = taskElement.querySelector(' .checkmark'); const
-                isCompleted = checkmark.classList.contains('checked'); if (isCompleted) { // Uncomplete task
-                    checkmark.classList.remove('checked'); taskElement.classList.remove('completed'); completedTasks--; //
-            Remove XP badge if it exists const xpBadge = taskElement.querySelector('.xp-badge'); if (xpBadge)
-                        xpBadge.remove();
-                } else { // Complete task checkmark.classList.add('checked');
-                taskElement.classList.add('completed'); completedTasks++; // Show XP gain const
-                xpEarned = Math.floor(Math.random() * 5) + 5; // 5-10 XP showXPGain(xpEarned, taskElement); // Play sound and
-            confetti triggerConfetti(); // Check if all tasks are completed if (completedTasks===totalTasks) {
-                setTimeout(() => {
-                    alert('🎉 Amazing! All tasks completed! You earned a bonus 25 XP!');
-                    triggerConfetti();
-                    showXPGain(25, document.querySelector('.page-title'));
-                }, 500);
-            }
-        }
+            const checkmark = taskElement.querySelector('.checkmark');
+            const isCompleted = checkmark.classList.contains('checked');
 
-        // Update progress
-        updateProgress();
+            if (isCompleted) {
+                // Uncomplete task
+                checkmark.classList.remove('checked');
+                taskElement.classList.remove('completed');
+                completedTasks--;
+                // Remove XP badge if it exists
+                const xpBadge = taskElement.querySelector('.xp-badge');
+                if (xpBadge) xpBadge.remove();
+            } else {
+                // Complete task
+                checkmark.classList.add('checked');
+                taskElement.classList.add('completed');
+                completedTasks++;
+                // Show XP gain
+                const xpEarned = Math.floor(Math.random() * 5) + 5; // 5-10 XP
+                showXPGain(xpEarned, taskElement);
+                // Play sound and confetti
+                triggerConfetti();
+                // Check if all tasks are completed
+                if (completedTasks === totalTasks) {
+                    setTimeout(() => {
+                        alert('🎉 Amazing! All tasks completed! You earned a bonus 25 XP!');
+                        triggerConfetti();
+                        showXPGain(25, document.querySelector('.page-title'));
+                    }, 500);
+                }
             }
+            // Update progress
+            updateProgress();
+        }
 
         function updateProgress() {
             const percentage = (completedTasks / totalTasks) * 100;
             const progressCircle = document.querySelector('.progress-circle circle:last-child');
-            const progressText = document.querySelector('.progress-circle .text-gradient');
-            const tasksCount = document.querySelector('.card-content .text-gradient:nth-child(2)');
+            const progressPercent = document.getElementById('progress-percent');
+            const tasksCount = document.getElementById('tasks-count');
 
             if (progressCircle) {
                 const circumference = 2 * Math.PI * 52;
@@ -440,8 +455,8 @@
                 progressCircle.style.strokeDashoffset = offset;
             }
 
-            if (progressText) {
-                progressText.textContent = `${Math.round(percentage)}%`;
+            if (progressPercent) {
+                progressPercent.textContent = `${Math.round(percentage)}%`;
             }
 
             if (tasksCount) {
@@ -463,12 +478,14 @@
 
             // Form submission
             const form = document.querySelector('.add-task-form .btn-primary');
-            form.addEventListener('click', function (e) {
-                e.preventDefault();
-                alert('🎯 New task added! +5 XP');
-                showXPGain(5, this);
-                triggerConfetti();
-            });
+            if (form) {
+                form.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    alert('🎯 New task added! +5 XP');
+                    showXPGain(5, this);
+                    triggerConfetti();
+                });
+            }
         });
     </script>
 </body>
